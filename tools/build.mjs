@@ -10,9 +10,9 @@ const assetsDir = path.join(rootDir, "assets");
 const distDir = path.join(rootDir, "dist");
 
 const HEALTH_COLORS = {
-  green: "Green",
-  yellow: "Yellow",
-  red: "Red"
+  green: "\uD83D\uDFE2 Stable",
+  yellow: "\uD83D\uDFE1 Observation",
+  red: "\uD83D\uDD34 Critical"
 };
 
 const RISK_LEVELS = new Set(["low", "medium", "high", "unknown"]);
@@ -362,18 +362,49 @@ const pageShell = (
   ${extraHead}
 </head>
 <body>
+  <div class="clinic-scenery" aria-hidden="true">
+    <span class="scenery-plus scenery-plus-one"></span>
+    <span class="scenery-plus scenery-plus-two"></span>
+    <span class="scenery-pill scenery-pill-one"></span>
+    <span class="scenery-pill scenery-pill-two"></span>
+    <span class="scenery-pulse"></span>
+  </div>
   <header class="site-header">
     <div class="container">
-      <a href="${htmlEscape(homeHref)}" class="brand">BenchmarkCards</a>
+      <a href="${htmlEscape(homeHref)}" class="brand">
+        <span class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 40 40" role="img" focusable="false">
+            <rect x="1" y="1" width="38" height="38" rx="9" class="logo-bg" />
+            <path class="logo-pulse" d="M4 21 h7 l3 -9 l5 17 l4 -12 l3 4 h7" />
+            <g class="logo-cross">
+              <rect x="26" y="6" width="8" height="8" rx="2" />
+              <rect x="28.5" y="3.5" width="3" height="13" rx="1.2" />
+              <rect x="23.5" y="8.5" width="13" height="3" rx="1.2" />
+            </g>
+          </svg>
+        </span>
+        <span class="brand-name">Benchmark Ward</span>
+      </a>
       <nav aria-label="Primary navigation">
-        <a href="${htmlEscape(homeHref)}">Benchmarks</a>
-        <a href="${htmlEscape(compareHref)}">Compare</a>
+        <a href="${htmlEscape(homeHref)}">\uD83D\uDECF\uFE0F Ward</a>
+        <a href="${htmlEscape(compareHref)}">\uD83D\uDCCB Compare Charts</a>
       </nav>
     </div>
   </header>
   <main class="container">
     ${content}
   </main>
+  <footer class="site-footer">
+    <div class="container">
+      <p class="footer-vitals" aria-hidden="true">
+        <svg viewBox="0 0 240 24" role="img" focusable="false">
+          <path d="M0 12 h60 l6 -9 l8 18 l7 -14 l5 5 h149" />
+        </svg>
+      </p>
+      <p><span aria-hidden="true">\uD83C\uDFE5</span> <strong>Benchmark Ward</strong> \u2014 visiting hours 24/7. Please sanitize your prompts on entry.</p>
+      <p class="footer-fineprint">Not a real hospital. No benchmarks were harmed in the making of this catalog, except the saturated ones (they were gently discharged).</p>
+    </div>
+  </footer>
   ${inlineScript}
 </body>
 </html>
@@ -431,8 +462,19 @@ const renderHome = async (benchmarks) => {
 
   const body = `
 <section class="hero">
-  <h1>BenchmarkCards</h1>
-  <p>Evidence-linked guidance for choosing and assessing LLM evaluation benchmarks.</p>
+  <div class="hero-illustration" aria-hidden="true">
+    <div class="hero-chart">
+      <span class="chart-clip"></span>
+      <span class="chart-line chart-line-long"></span>
+      <span class="chart-line"></span>
+      <span class="chart-line chart-line-short"></span>
+      <span class="chart-check"></span>
+    </div>
+    <div class="hero-stethoscope"><span></span></div>
+  </div>
+  <p class="hero-kicker"><span aria-hidden="true">\uD83C\uDFE5</span> Now admitting</p>
+  <h1>Benchmark Ward</h1>
+  <p>The intensive care unit for LLM evaluation benchmarks. We take their vitals, read their charts, and flag the ones flatlining from saturation and contamination.</p>
 </section>
 
 <section class="controls card" aria-label="Benchmark filters">
@@ -480,8 +522,8 @@ const renderHome = async (benchmarks) => {
 </section>
 
 <section class="selection-summary" aria-live="polite">
-  <p id="comparisonCount">Select 2 to 5 benchmarks to compare.</p>
-  <a id="compareLink" class="compare-action is-disabled" href="compare/" aria-disabled="true">Compare selected</a>
+  <p id="comparisonCount">Select 2 to 5 patients for a joint consult.</p>
+  <a id="compareLink" class="compare-action is-disabled" href="compare/" aria-disabled="true">Send to consult</a>
 </section>
 
 <section id="benchmarkGrid" class="grid">
@@ -489,14 +531,14 @@ const renderHome = async (benchmarks) => {
 </section>
 
 <section class="coverage-section" aria-labelledby="coverage-heading">
-  <h2 id="coverage-heading">Catalog Coverage</h2>
+  <h2 id="coverage-heading">Ward Census</h2>
   <div class="coverage-grid">
     <div>
-      <h3>Current taxonomies</h3>
+      <h3>Departments on call</h3>
       <div class="chip-row">${coverageTaxonomies}</div>
     </div>
     <div>
-      <h3>Priority gaps</h3>
+      <h3>Beds still empty</h3>
       <div class="chip-row">${coverageGaps}</div>
     </div>
   </div>
@@ -507,7 +549,7 @@ const renderHome = async (benchmarks) => {
 ${await readFile(path.join(assetsDir, "search.js"), "utf8")}
 </script>`;
 
-  return pageShell("BenchmarkCards", body, {
+  return pageShell("Benchmark Ward", body, {
     homeHref: "./",
     compareHref: "compare/",
     assetPrefix: "./assets",
@@ -594,7 +636,7 @@ const renderBenchmarkPage = (benchmark, benchmarksBySlug, benchmarksByTitle) => 
   </section>
 </article>`;
 
-  return pageShell(`${benchmark.title} • BenchmarkCards`, body, {
+  return pageShell(`${benchmark.title} \u2022 Benchmark Ward`, body, {
     homeHref: "../../",
     compareHref: "../../compare/",
     assetPrefix: "../../assets"
@@ -604,15 +646,15 @@ const renderBenchmarkPage = (benchmark, benchmarksBySlug, benchmarksByTitle) => 
 const renderComparePage = () => {
   const body = `
 <section class="compare-header">
-  <h1>Compare Benchmarks</h1>
-  <p id="compareStatus" aria-live="polite">Select 2 to 5 benchmarks from the catalog.</p>
+  <h1>Compare Charts</h1>
+  <p id="compareStatus" aria-live="polite">Select 2 to 5 patients from the ward for a joint consult.</p>
 </section>
 
 <section class="comparison-surface" aria-live="polite">
   <div id="comparisonTable"></div>
 </section>`;
 
-  return pageShell("Compare Benchmarks • BenchmarkCards", body, {
+  return pageShell("Compare Charts \u2022 Benchmark Ward", body, {
     homeHref: "../",
     compareHref: "./",
     assetPrefix: "../assets",
@@ -682,4 +724,4 @@ const createSite = async () => {
 };
 
 await createSite();
-console.log("Built BenchmarkCards into dist/");
+console.log("\uD83C\uDFE5 Built Benchmark Ward into dist/");

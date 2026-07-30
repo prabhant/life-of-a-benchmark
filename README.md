@@ -1,13 +1,16 @@
 ---
-title: BenchmarkCards
-description: Evidence-linked decision support for LLM evaluation benchmarks
+title: Benchmark Ward
+description: Evidence-linked decision support for LLM evaluation benchmarks, with bedside manner
 ---
 
-## BenchmarkCards
+## Benchmark Ward
 
-BenchmarkCards is a fully static, evidence-linked catalog for researchers and
-developers selecting LLM evaluation benchmarks. It generates searchable records,
-comparison views, decision guidance, and governance context from Markdown.
+Benchmark Ward is a fully static, evidence-linked catalog for researchers and
+developers selecting LLM evaluation benchmarks. Think of it as the intensive care
+unit for benchmarks: it checks their vitals, reads their charts, and flags the
+ones flatlining from saturation or contamination. It generates searchable
+records, comparison views, decision guidance, and governance context from
+Markdown.
 
 ## Stack
 

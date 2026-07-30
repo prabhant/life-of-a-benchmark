@@ -50,7 +50,7 @@
       if (show) visible += 1;
     }
 
-    resultCount.textContent = `${visible} benchmark(s)`;
+    resultCount.textContent = `${visible} patient(s) on the ward`;
   };
 
   const updateComparisonSelection = () => {
@@ -62,9 +62,9 @@
     }
 
     if (selected.length === 0) {
-      comparisonCount.textContent = "Select 2 to 5 benchmarks to compare.";
+      comparisonCount.textContent = "Select 2 to 5 patients for a joint consult.";
     } else {
-      comparisonCount.textContent = `${selected.length} benchmark${selected.length === 1 ? "" : "s"} selected.`;
+      comparisonCount.textContent = `${selected.length} patient${selected.length === 1 ? "" : "s"} on the gurney.`;
     }
 
     compareLink.classList.toggle("is-disabled", !canCompare);

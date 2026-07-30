@@ -13,7 +13,7 @@ Saturation Risk: High
 Contamination Risk: High
 Reproducibility: Medium
 Last Reviewed: 2026-07-30
-Reviewer: BenchmarkCards editorial review
+Reviewer: Benchmark Ward editorial review
 Canonical Source: https://arxiv.org/abs/2110.14168
 License Status: Verify upstream terms before use
 Link Status: URL syntax validated; availability checked weekly

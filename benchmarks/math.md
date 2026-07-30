@@ -13,7 +13,7 @@ Saturation Risk: Unknown
 Contamination Risk: High
 Reproducibility: Low
 Last Reviewed: 2026-07-30
-Reviewer: BenchmarkCards editorial review
+Reviewer: Benchmark Ward editorial review
 Canonical Source: https://arxiv.org/abs/2103.03874
 License Status: Verify upstream terms before use
 Link Status: URL syntax validated; availability checked weekly

@@ -1,14 +1,17 @@
 :root {
   color-scheme: light;
-  --bg: #f8fafc;
+  --bg: #e9f4f2;
   --surface: #ffffff;
-  --line: #dce3ee;
-  --text: #1a2333;
-  --muted: #556074;
-  --green: #14804a;
-  --yellow: #9a6b00;
-  --red: #b42318;
-  --radius: 12px;
+  --line: #cfe4e3;
+  --text: #123037;
+  --muted: #55727a;
+  --green: #0f8a5f;
+  --yellow: #b3791b;
+  --red: #d1495b;
+  --accent: #1f7a8c;
+  --accent-ink: #0f5a68;
+  --scrub: #2f9e79;
+  --radius: 14px;
 }
 
 * {
@@ -19,7 +22,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: Aptos, "Trebuchet MS", "Segoe UI", sans-serif;
   line-height: 1.55;
 }
 
@@ -486,5 +489,465 @@ a:hover {
   .profile-grid,
   .governance-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   Benchmark Ward hospital theme
+   Clinical whites, scrub teal, triage badges, and a heartbeat or two.
+   ========================================================================== */
+
+body {
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.72) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.72) 1px, transparent 1px),
+    radial-gradient(circle at 15% 18%, rgba(89, 189, 173, 0.18), transparent 25rem),
+    linear-gradient(135deg, #e6f3f1 0%, #f9fcfb 52%, #e9f1fb 100%);
+  background-size: 32px 32px, 32px 32px, auto, auto;
+  background-attachment: fixed;
+}
+
+.clinic-scenery {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.scenery-plus,
+.scenery-plus::after {
+  position: absolute;
+  display: block;
+  width: 2.8rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: rgba(47, 158, 121, 0.11);
+  content: "";
+}
+
+.scenery-plus::after {
+  transform: rotate(90deg);
+}
+
+.scenery-plus-one {
+  top: 16rem;
+  left: 4vw;
+  transform: rotate(-18deg);
+}
+
+.scenery-plus-two {
+  right: 5vw;
+  bottom: 12rem;
+  transform: rotate(24deg) scale(1.35);
+}
+
+.scenery-pill {
+  position: absolute;
+  display: block;
+  width: 4rem;
+  height: 1.7rem;
+  border: 0.38rem solid rgba(31, 122, 140, 0.11);
+  border-radius: 999px;
+}
+
+.scenery-pill::after {
+  position: absolute;
+  top: -0.38rem;
+  bottom: -0.38rem;
+  left: 50%;
+  border-left: 0.25rem solid rgba(31, 122, 140, 0.11);
+  content: "";
+}
+
+.scenery-pill-one {
+  top: 34rem;
+  right: 5vw;
+  transform: rotate(-28deg);
+}
+
+.scenery-pill-two {
+  bottom: 5rem;
+  left: 7vw;
+  transform: rotate(30deg) scale(0.75);
+}
+
+.scenery-pulse {
+  position: absolute;
+  top: 42rem;
+  left: 0;
+  width: 12rem;
+  height: 3rem;
+  opacity: 0.15;
+  background: var(--red);
+  clip-path: polygon(0 50%, 30% 50%, 38% 10%, 48% 90%, 57% 33%, 64% 50%, 100% 50%, 100% 58%, 68% 58%, 58% 43%, 48% 100%, 37% 18%, 34% 58%, 0 58%);
+}
+
+a {
+  color: var(--accent-ink);
+}
+
+/* Header now reads like an admissions desk */
+.site-header {
+  border-bottom: 2px solid var(--accent);
+  box-shadow: 0 1px 0 rgba(15, 90, 104, 0.08);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.brand-logo {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+}
+
+.brand-logo svg {
+  width: 100%;
+  height: 100%;
+}
+
+.brand-logo .logo-bg {
+  fill: var(--accent);
+}
+
+.brand-logo .logo-cross rect {
+  fill: #ffffff;
+}
+
+.brand-logo .logo-pulse {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: ward-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes ward-pulse {
+  0% { stroke-dashoffset: 60; }
+  45% { stroke-dashoffset: 0; }
+  70% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -60; }
+}
+
+.brand-name {
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: var(--accent-ink);
+}
+
+.site-header nav a {
+  color: var(--muted);
+  font-weight: 600;
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+}
+
+.site-header nav a:hover {
+  color: var(--accent-ink);
+  background: #e2f1f0;
+  text-decoration: none;
+}
+
+/* Hero: the waiting room sign */
+.hero {
+  position: relative;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, #e7f4f2 100%);
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--scrub);
+  border-radius: var(--radius);
+  padding: 1.6rem 1.4rem;
+  margin-top: 2rem;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: "\271A";
+  position: absolute;
+  top: -0.6rem;
+  right: 0.6rem;
+  font-size: 6rem;
+  line-height: 1;
+  color: rgba(209, 73, 91, 0.12);
+  font-weight: 900;
+}
+
+.hero-illustration {
+  position: absolute;
+  right: 1.8rem;
+  bottom: 1rem;
+  width: 10rem;
+  height: 8rem;
+}
+
+.hero-chart {
+  position: absolute;
+  right: 1rem;
+  bottom: 0;
+  width: 6.7rem;
+  height: 7rem;
+  padding: 1.5rem 0.75rem 0.75rem;
+  border: 2px solid #b9d6d5;
+  border-radius: 6px;
+  background: #fffefa;
+  box-shadow: 0 0.45rem 0 rgba(31, 122, 140, 0.1);
+  transform: rotate(7deg);
+}
+
+.chart-clip {
+  position: absolute;
+  top: -0.35rem;
+  left: 50%;
+  width: 2.7rem;
+  height: 0.7rem;
+  border-radius: 0.3rem;
+  background: var(--accent);
+  transform: translateX(-50%);
+}
+
+.chart-line {
+  display: block;
+  width: 3.4rem;
+  height: 0.35rem;
+  margin-bottom: 0.55rem;
+  border-radius: 999px;
+  background: #d7e9e7;
+}
+
+.chart-line-long { width: 4.5rem; }
+.chart-line-short { width: 2.3rem; }
+
+.chart-check {
+  position: absolute;
+  right: 0.65rem;
+  bottom: 0.65rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: var(--scrub);
+}
+
+.chart-check::after {
+  position: absolute;
+  top: 0.38rem;
+  left: 0.47rem;
+  width: 0.6rem;
+  height: 0.3rem;
+  border-bottom: 2px solid #fff;
+  border-left: 2px solid #fff;
+  content: "";
+  transform: rotate(-45deg);
+}
+
+.hero-stethoscope {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.3rem;
+  width: 4.8rem;
+  height: 5.2rem;
+  border: 0.5rem solid #67aeb2;
+  border-top: 0;
+  border-radius: 0 0 3rem 3rem;
+  transform: rotate(-25deg);
+}
+
+.hero-stethoscope::before,
+.hero-stethoscope::after {
+  position: absolute;
+  top: -0.8rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: #67aeb2;
+  content: "";
+}
+
+.hero-stethoscope::before { left: -0.5rem; }
+.hero-stethoscope::after { right: -0.5rem; }
+
+.hero-stethoscope span {
+  position: absolute;
+  right: -0.85rem;
+  bottom: -0.75rem;
+  width: 1.65rem;
+  height: 1.65rem;
+  border: 0.35rem solid #67aeb2;
+  border-radius: 50%;
+  background: #dff2ef;
+}
+
+.hero-kicker {
+  margin: 0 0 0.35rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+  color: var(--scrub);
+}
+
+.hero h1 {
+  color: var(--accent-ink);
+}
+
+/* Cards read like patient charts clipped to a clipboard */
+.card {
+  box-shadow: 0 1px 2px rgba(15, 90, 104, 0.05);
+}
+
+.benchmark-card {
+  position: relative;
+  border-top: 4px solid var(--accent);
+}
+
+.benchmark-card::before {
+  content: "";
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 46px;
+  height: 10px;
+  border-radius: 6px 6px 3px 3px;
+  background: #b9d6d5;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.08);
+}
+
+/* Triage wristbands */
+.health-badge {
+  letter-spacing: 0.01em;
+}
+
+/* Chips look like pills */
+.chip {
+  background: #e4f1f0;
+  color: var(--accent-ink);
+  border: 1px solid #cfe4e3;
+}
+
+.chip-gap {
+  background: #fdeede;
+  color: #9a5b16;
+  border-color: #f4d9bb;
+}
+
+/* Buttons in scrub teal */
+.compare-action {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.compare-toggle input {
+  accent-color: var(--accent);
+}
+
+.comparison-table thead th {
+  background: #e4f1f0;
+}
+
+.profile-grid > div {
+  border-left-color: var(--scrub);
+}
+
+/* Discharge desk footer */
+.site-footer {
+  margin-top: 2.5rem;
+  border-top: 2px dashed var(--line);
+  background: #ffffff;
+  padding: 1.4rem 0 2rem;
+}
+
+.site-footer p {
+  margin: 0.3rem 0;
+  color: var(--muted);
+  text-align: center;
+}
+
+.site-footer strong {
+  color: var(--accent-ink);
+}
+
+.footer-vitals svg {
+  display: block;
+  width: min(240px, 60vw);
+  height: 24px;
+  margin: 0 auto 0.6rem;
+}
+
+.footer-vitals path {
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.footer-fineprint {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: #7f97a0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-logo .logo-pulse {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  body {
+    background-attachment: scroll;
+  }
+
+  .site-header .container {
+    min-height: 58px;
+  }
+
+  .brand-name {
+    font-size: 0.94rem;
+    white-space: nowrap;
+  }
+
+  .brand {
+    flex-shrink: 0;
+  }
+
+  .site-header nav {
+    gap: 0.2rem;
+  }
+
+  .site-header nav a {
+    padding: 0.25rem 0.25rem;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+
+  .hero {
+    padding: 1.35rem 1.1rem 7.9rem;
+  }
+
+  .hero-illustration {
+    right: 0.75rem;
+    bottom: 0.45rem;
+    transform: scale(0.86);
+    transform-origin: bottom right;
+  }
+
+  .hero::after {
+    top: 0.1rem;
+    right: 0.45rem;
+    font-size: 4rem;
+  }
+
+  .scenery-plus-one,
+  .scenery-pill-one {
+    display: none;
   }
 }

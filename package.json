@@ -2,7 +2,7 @@
   "name": "benchmarkcards",
   "version": "1.0.0",
   "private": true,
-  "description": "Static benchmark card website generated from Markdown records.",
+  "description": "Benchmark Ward: a hospital-themed static catalog that checks the vitals of LLM evaluation benchmarks, generated from Markdown records.",
   "scripts": {
     "build": "node tools/build.mjs"
   }
