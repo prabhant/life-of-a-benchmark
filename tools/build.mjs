@@ -96,12 +96,19 @@ const parseMarkdownBenchmark = (filename, raw) => {
   const description = (sections.description || "").trim();
   const capabilities = parseBullets(sections.capabilities || "");
   const timeline = parseBullets(sections.timeline || "");
-  const knownIssues = parseBullets(sections["known issues"] || "");
+  const knownIssues = parseEvidence(sections["known issues"] || "");
   const evidence = parseEvidence(sections.evidence || "");
   const successors = parseBullets(sections.successors || "");
 
   if (!description) {
     throw new Error(`Missing Description section content in ${filename}`);
+  }
+
+  const unsupportedIssue = knownIssues.find((issue) => !issue.url);
+  if (unsupportedIssue) {
+    throw new Error(
+      `Known issue must link directly to supporting evidence in ${filename}: ${unsupportedIssue.label}`
+    );
   }
 
   return {
@@ -209,7 +216,9 @@ const renderHome = async (benchmarks) => {
       return `<article class="card benchmark-card" data-title="${htmlEscape(
         benchmark.title.toLowerCase()
       )}" data-health="${htmlEscape(benchmark.health)}" data-content="${htmlEscape(
-        `${benchmark.description} ${benchmark.capabilities.join(" ")} ${benchmark.knownIssues.join(" ")}`.toLowerCase()
+        `${benchmark.description} ${benchmark.capabilities.join(" ")} ${benchmark.knownIssues
+          .map((issue) => issue.label)
+          .join(" ")}`.toLowerCase()
       )}">
   <div class="card-top">
     <h2><a href="benchmarks/${htmlEscape(benchmark.slug)}/">${htmlEscape(benchmark.title)}</a></h2>
@@ -298,7 +307,7 @@ const renderBenchmarkPage = (benchmark, benchmarksBySlug, benchmarksByTitle) => 
 
   <section class="card">
     <h2>Known Issues</h2>
-    ${renderList(benchmark.knownIssues.map((item) => htmlEscape(item)))}
+    ${renderEvidenceList(benchmark.knownIssues)}
   </section>
 
   <section class="card">

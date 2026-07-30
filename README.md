@@ -30,7 +30,9 @@ It stores benchmark records as Markdown files and generates clean, academic-styl
    - `## Known Issues`
    - `## Evidence`
    - `## Successors`
-3. Open a pull request with your changes.
+3. Format every known issue as `[Critique](supporting evidence URL)`.
+   The build rejects critiques without a direct evidence link.
+4. Open a pull request with your changes.
 
 This repository is intentionally GitHub-PR-centric: contributions are benchmark file edits reviewed via pull requests.
 
