@@ -1,30 +1,35 @@
 ---
-title: Benchmark Ward
-description: Evidence-linked decision support for LLM evaluation benchmarks, with bedside manner
+title: Benchmark Metrology Lab
+description: Evidence-linked measurement profiles for LLM evaluation benchmarks
 ---
 
-## Benchmark Ward
+## Benchmark Metrology Lab
 
-Benchmark Ward is a fully static, evidence-linked catalog for researchers and
-developers selecting LLM evaluation benchmarks. Think of it as the intensive care
-unit for benchmarks: it checks their vitals, reads their charts, and flags the
-ones flatlining from saturation or contamination. It generates searchable
-records, comparison views, decision guidance, and governance context from
-Markdown.
+Benchmark Metrology Lab is a fully static, evidence-linked instrument register
+for researchers selecting LLM evaluation benchmarks. It documents what each
+benchmark measures, the conditions under which its scores support an inference,
+and the validity threats that qualify interpretation. Markdown records generate
+searchable measurement profiles, comparison views, interpretation guidance, and
+assessment governance metadata.
+
+The catalog combines measurement science with incident-reporting practices.
+Status labels summarize fitness for an intended use, while evidence-linked
+validity threats preserve the observations, scope, and provenance needed for
+independent review.
 
 ## Stack
 
-- Plain HTML/CSS/JavaScript
-- Static generator script in Node.js
-- Markdown records in `benchmarks/`
-- GitHub Actions deployment to GitHub Pages
+* Plain HTML, CSS, and JavaScript
+* Static generator script in Node.js
+* Markdown records in `benchmarks/`
+* GitHub Actions deployment to GitHub Pages
 
 ## Project structure
 
-- `benchmarks/` — benchmark records (Markdown)
-- `assets/` — shared CSS and browser-side search/filter JS
-- `tools/build.mjs` — static page generator
-- `dist/` — generated site output (deployment artifact)
+* `benchmarks/`: benchmark measurement records
+* `assets/`: shared CSS and browser-side search and filtering JavaScript
+* `tools/build.mjs`: static page generator
+* `dist/`: generated deployment artifact
 
 ## Benchmark Record Schema
 
@@ -32,11 +37,11 @@ Every file in `benchmarks/` requires YAML frontmatter with `title` and
 `description`, followed by these metadata lines:
 
 * `Slug`
-* `Health`
+* `Measurement Status`
 * `Taxonomy`
 * `Task Format`
 * `Languages`
-* `Primary Metric`
+* `Scoring Rule`
 * `Saturation Risk`
 * `Contamination Risk`
 * `Reproducibility`
@@ -51,21 +56,23 @@ Use `Low`, `Medium`, `High`, or `Unknown` for risk and reproducibility fields.
 
 Each record also requires these sections:
 
-* `## Description`
-* `## Recommended Use`
-* `## Avoid When`
-* `## Capabilities`
-* `## Timeline`
-* `## Known Issues`
-* `## Evidence`
-* `## Successors`
+* `## Instrument Overview`
+* `## Supported Uses`
+* `## Unsupported Inferences`
+* `## Measurement Targets`
+* `## Evidence History`
+* `## Validity Threats`
+* `## Evidence Register`
+* `## Alternative Instruments`
 
-Health is a catalog assessment. Green is suitable as a primary signal, Yellow
-needs companion evaluations, and Red should not be used as primary evidence.
+Measurement status is an editorial assessment. Use `Fit` when the documented
+evidence supports the stated use, `Qualified` when interpretation requires
+companion evaluations or explicit constraints, and `Not Fit` when the benchmark
+should not support primary inference.
 
-Catalog guidance is editorial and appears separately from reported critiques.
-Every critique must be a direct Markdown link, and its URL must also appear in
-the evidence list. Use this source format:
+Interpretation guidance is editorial and appears separately from reported
+validity threats. Every threat must be a direct Markdown link, and its URL must
+also appear in the evidence register. Use this source format:
 
 ```markdown
 - [Title | source type | year | claim scope](https://example.org/source)
@@ -73,17 +80,18 @@ the evidence list. Use this source format:
 
 Allowed source types are `original`, `critique`, `adoption`, `leaderboard`, and
 `implementation`. The generator rejects missing source metadata, unsupported
-critiques, or incomplete decision and governance fields.
+validity threats, or incomplete measurement and governance fields.
 
 The catalog records a high-level reproducibility assessment. It does not record
 run-level dataset revisions, prompt templates, decoding settings, or harness
 versions.
 
-## Decision Support
+## Measurement Decision Support
 
-The catalog supports taxonomy, health, saturation-risk, and contamination-risk
-filters. Select two to five records to compare their decision profiles,
-guidance, governance metadata, and source coverage.
+The register supports taxonomy, measurement-status, saturation-risk, and
+contamination-risk filters. Select two to five instruments to compare their
+measurement profiles, interpretation guidance, governance metadata, and source
+coverage.
 
 The coverage map identifies currently represented taxonomies and priority gaps
 such as code and agents, long context, multilingual behavior, RAG and

@@ -1,17 +1,18 @@
 :root {
   color-scheme: light;
-  --bg: #e9f4f2;
+  --bg: #edf3f0;
   --surface: #ffffff;
-  --line: #cfe4e3;
-  --text: #123037;
-  --muted: #55727a;
-  --green: #0f8a5f;
-  --yellow: #b3791b;
-  --red: #d1495b;
-  --accent: #1f7a8c;
-  --accent-ink: #0f5a68;
-  --scrub: #2f9e79;
-  --radius: 14px;
+  --line: #c5d6d0;
+  --text: #172b2f;
+  --muted: #526b70;
+  --fit: #16734f;
+  --qualified: #a96808;
+  --not-fit: #b73d4b;
+  --accent: #087f8c;
+  --accent-ink: #075563;
+  --calibration: #d97706;
+  --graph: #91afa8;
+  --radius: 7px;
 }
 
 * {
@@ -24,6 +25,13 @@ body {
   color: var(--text);
   font-family: Aptos, "Trebuchet MS", "Segoe UI", sans-serif;
   line-height: 1.55;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  letter-spacing: 0;
 }
 
 a {
@@ -191,26 +199,27 @@ a:hover {
   align-items: center;
 }
 
-.health-badge {
-  border-radius: 999px;
+.status-badge {
+  border-radius: 4px;
   padding: 0.22rem 0.62rem;
   font-size: 0.78rem;
   font-weight: 700;
   border: 1px solid currentColor;
+  white-space: nowrap;
 }
 
-.health-green {
-  color: var(--green);
+.status-fit {
+  color: var(--fit);
   background: #e8f7ef;
 }
 
-.health-yellow {
-  color: var(--yellow);
+.status-qualified {
+  color: var(--qualified);
   background: #fff8e1;
 }
 
-.health-red {
-  color: var(--red);
+.status-not-fit {
+  color: var(--not-fit);
   background: #ffebe9;
 }
 
@@ -339,12 +348,12 @@ a:hover {
 
 .risk-high {
   background: #ffebe9;
-  color: var(--red);
+  color: var(--not-fit);
 }
 
 .risk-medium {
   background: #fff8e1;
-  color: var(--yellow);
+  color: var(--qualified);
 }
 
 .risk-low,
@@ -379,7 +388,7 @@ a:hover {
 
 .source-original {
   background: #e8f7ef;
-  color: var(--green);
+  color: var(--fit);
 }
 
 .coverage-section {
@@ -493,22 +502,21 @@ a:hover {
 }
 
 /* ==========================================================================
-   Benchmark Ward hospital theme
-   Clinical whites, scrub teal, triage badges, and a heartbeat or two.
+  Benchmark Metrology Lab theme
+  Graph paper, calibration marks, uncertainty, and instrument panels.
    ========================================================================== */
 
 body {
   background-color: var(--bg);
   background-image:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.72) 1px, transparent 1px),
-    linear-gradient(rgba(255, 255, 255, 0.72) 1px, transparent 1px),
-    radial-gradient(circle at 15% 18%, rgba(89, 189, 173, 0.18), transparent 25rem),
-    linear-gradient(135deg, #e6f3f1 0%, #f9fcfb 52%, #e9f1fb 100%);
-  background-size: 32px 32px, 32px 32px, auto, auto;
+    linear-gradient(90deg, rgba(77, 119, 112, 0.07) 1px, transparent 1px),
+    linear-gradient(rgba(77, 119, 112, 0.07) 1px, transparent 1px),
+    linear-gradient(135deg, #edf3f0 0%, #fbfcfa 52%, #edf2f7 100%);
+  background-size: 24px 24px, 24px 24px, auto;
   background-attachment: fixed;
 }
 
-.clinic-scenery {
+.measurement-scenery {
   position: fixed;
   inset: 0;
   z-index: -1;
@@ -516,82 +524,80 @@ body {
   pointer-events: none;
 }
 
-.scenery-plus,
-.scenery-plus::after {
+.scenery-axis {
   position: absolute;
   display: block;
-  width: 2.8rem;
-  height: 0.7rem;
-  border-radius: 999px;
-  background: rgba(47, 158, 121, 0.11);
+  width: 7rem;
+  height: 7rem;
+  border-bottom: 2px solid rgba(8, 127, 140, 0.13);
+  border-left: 2px solid rgba(8, 127, 140, 0.13);
+}
+
+.scenery-axis::before {
+  position: absolute;
+  inset: 0 0 0 -0.25rem;
+  background: repeating-linear-gradient(90deg, transparent 0 1.2rem, rgba(8, 127, 140, 0.13) 1.2rem 1.3rem);
+  clip-path: inset(calc(100% - 0.45rem) 0 0 0);
   content: "";
 }
 
-.scenery-plus::after {
-  transform: rotate(90deg);
-}
-
-.scenery-plus-one {
+.scenery-axis-one {
   top: 16rem;
   left: 4vw;
-  transform: rotate(-18deg);
+  transform: rotate(-8deg);
 }
 
-.scenery-plus-two {
+.scenery-axis-two {
   right: 5vw;
   bottom: 12rem;
-  transform: rotate(24deg) scale(1.35);
+  transform: rotate(12deg) scale(1.2);
 }
 
-.scenery-pill {
+.scenery-target {
   position: absolute;
   display: block;
-  width: 4rem;
-  height: 1.7rem;
-  border: 0.38rem solid rgba(31, 122, 140, 0.11);
-  border-radius: 999px;
-}
-
-.scenery-pill::after {
-  position: absolute;
-  top: -0.38rem;
-  bottom: -0.38rem;
-  left: 50%;
-  border-left: 0.25rem solid rgba(31, 122, 140, 0.11);
-  content: "";
-}
-
-.scenery-pill-one {
   top: 34rem;
-  right: 5vw;
-  transform: rotate(-28deg);
+  right: 6vw;
+  width: 5rem;
+  height: 5rem;
+  border: 2px solid rgba(217, 119, 6, 0.13);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.25rem transparent, inset 0 0 0 calc(1.25rem + 2px) rgba(217, 119, 6, 0.13);
 }
 
-.scenery-pill-two {
-  bottom: 5rem;
-  left: 7vw;
-  transform: rotate(30deg) scale(0.75);
-}
-
-.scenery-pulse {
+.scenery-target::after {
   position: absolute;
-  top: 42rem;
-  left: 0;
-  width: 12rem;
-  height: 3rem;
-  opacity: 0.15;
-  background: var(--red);
-  clip-path: polygon(0 50%, 30% 50%, 38% 10%, 48% 90%, 57% 33%, 64% 50%, 100% 50%, 100% 58%, 68% 58%, 58% 43%, 48% 100%, 37% 18%, 34% 58%, 0 58%);
+  top: 50%;
+  left: 50%;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: rgba(217, 119, 6, 0.18);
+  content: "";
+  transform: translate(-50%, -50%);
+}
+
+.scenery-error-bar {
+  position: absolute;
+  top: 44rem;
+  left: 5vw;
+  width: 7rem;
+  height: 1.2rem;
+  border-right: 2px solid rgba(183, 61, 75, 0.13);
+  border-left: 2px solid rgba(183, 61, 75, 0.13);
+  background: linear-gradient(rgba(183, 61, 75, 0.13), rgba(183, 61, 75, 0.13)) center / 100% 2px no-repeat;
 }
 
 a {
   color: var(--accent-ink);
 }
 
-/* Header now reads like an admissions desk */
+/* Compact instrument register masthead */
 .site-header {
   border-bottom: 2px solid var(--accent);
   box-shadow: 0 1px 0 rgba(15, 90, 104, 0.08);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
 }
 
 .brand {
@@ -615,26 +621,28 @@ a {
   fill: var(--accent);
 }
 
-.brand-logo .logo-cross rect {
-  fill: #ffffff;
-}
-
-.brand-logo .logo-pulse {
+.brand-logo .logo-axis,
+.brand-logo .logo-trend {
   fill: none;
   stroke: #ffffff;
-  stroke-width: 2.2;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 60;
-  stroke-dashoffset: 60;
-  animation: ward-pulse 2.4s ease-in-out infinite;
 }
 
-@keyframes ward-pulse {
-  0% { stroke-dashoffset: 60; }
-  45% { stroke-dashoffset: 0; }
-  70% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: -60; }
+.brand-logo .logo-trend {
+  stroke: #ffd18a;
+  stroke-dasharray: 32;
+  animation: calibration-trace 2.8s ease-in-out infinite;
+}
+
+.brand-logo .logo-point {
+  fill: #ffd18a;
+}
+
+@keyframes calibration-trace {
+  0%, 15% { stroke-dashoffset: 32; }
+  55%, 100% { stroke-dashoffset: 0; }
 }
 
 .brand-name {
@@ -647,21 +655,24 @@ a {
   color: var(--muted);
   font-weight: 600;
   padding: 0.3rem 0.55rem;
-  border-radius: 999px;
+  border-radius: 3px;
+  font-size: 0.9rem;
 }
 
 .site-header nav a:hover {
   color: var(--accent-ink);
-  background: #e2f1f0;
+  background: #e3f1ef;
   text-decoration: none;
 }
 
-/* Hero: the waiting room sign */
+/* Hero: calibration field note */
 .hero {
   position: relative;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, #e7f4f2 100%);
+  background:
+    linear-gradient(90deg, transparent 47px, rgba(183, 61, 75, 0.13) 48px, transparent 49px),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, #e5f1ee 100%);
   border: 1px solid var(--line);
-  border-left: 6px solid var(--scrub);
+  border-left: 6px solid var(--accent);
   border-radius: var(--radius);
   padding: 1.6rem 1.4rem;
   margin-top: 2rem;
@@ -669,13 +680,14 @@ a {
 }
 
 .hero::after {
-  content: "\271A";
+  content: "\00B1";
   position: absolute;
-  top: -0.6rem;
-  right: 0.6rem;
-  font-size: 6rem;
+  top: -1rem;
+  right: 0.4rem;
+  font-family: Georgia, serif;
+  font-size: 7rem;
   line-height: 1;
-  color: rgba(209, 73, 91, 0.12);
+  color: rgba(217, 119, 6, 0.11);
   font-weight: 900;
 }
 
@@ -687,100 +699,111 @@ a {
   height: 8rem;
 }
 
-.hero-chart {
+.calibration-plot {
   position: absolute;
   right: 1rem;
   bottom: 0;
-  width: 6.7rem;
+  width: 7.2rem;
   height: 7rem;
-  padding: 1.5rem 0.75rem 0.75rem;
-  border: 2px solid #b9d6d5;
-  border-radius: 6px;
-  background: #fffefa;
+  border: 1px solid #9dbbb5;
+  border-radius: 4px;
+  background:
+    linear-gradient(90deg, rgba(8, 127, 140, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(8, 127, 140, 0.08) 1px, transparent 1px),
+    #fff;
+  background-size: 0.9rem 0.9rem;
   box-shadow: 0 0.45rem 0 rgba(31, 122, 140, 0.1);
-  transform: rotate(7deg);
+  transform: rotate(4deg);
 }
 
-.chart-clip {
+.plot-axis {
   position: absolute;
-  top: -0.35rem;
-  left: 50%;
-  width: 2.7rem;
-  height: 0.7rem;
-  border-radius: 0.3rem;
-  background: var(--accent);
-  transform: translateX(-50%);
-}
-
-.chart-line {
   display: block;
-  width: 3.4rem;
-  height: 0.35rem;
-  margin-bottom: 0.55rem;
-  border-radius: 999px;
-  background: #d7e9e7;
+  background: var(--accent-ink);
 }
 
-.chart-line-long { width: 4.5rem; }
-.chart-line-short { width: 2.3rem; }
+.plot-axis-x {
+  right: 0.7rem;
+  bottom: 0.8rem;
+  left: 1rem;
+  height: 2px;
+}
 
-.chart-check {
+.plot-axis-y {
+  top: 0.7rem;
+  bottom: 0.8rem;
+  left: 1rem;
+  width: 2px;
+}
+
+.plot-trend {
   position: absolute;
-  right: 0.65rem;
-  bottom: 0.65rem;
-  width: 1.6rem;
-  height: 1.6rem;
+  top: 1.3rem;
+  left: 1.2rem;
+  width: 4.9rem;
+  height: 4.2rem;
+  background: var(--calibration);
+  clip-path: polygon(0 82%, 23% 61%, 45% 68%, 68% 34%, 100% 5%, 100% 11%, 70% 42%, 47% 76%, 24% 69%, 0 91%);
+}
+
+.plot-point {
+  position: absolute;
+  width: 0.65rem;
+  height: 0.65rem;
+  border: 2px solid #fff;
   border-radius: 50%;
-  background: var(--scrub);
+  background: var(--calibration);
+  box-shadow: 0 0 0 1px var(--calibration);
 }
 
-.chart-check::after {
+.plot-point-one { left: 2rem; bottom: 2.7rem; }
+.plot-point-two { left: 3.4rem; bottom: 2.4rem; }
+.plot-point-three { right: 0.8rem; top: 1rem; }
+
+.uncertainty-bar {
   position: absolute;
-  top: 0.38rem;
-  left: 0.47rem;
-  width: 0.6rem;
-  height: 0.3rem;
-  border-bottom: 2px solid #fff;
-  border-left: 2px solid #fff;
+  top: 1rem;
+  left: 3.55rem;
+  width: 2.5rem;
+  height: 0.8rem;
+  border-right: 2px solid var(--not-fit);
+  border-left: 2px solid var(--not-fit);
+  background: linear-gradient(var(--not-fit), var(--not-fit)) center / 100% 2px no-repeat;
+}
+
+.calibration-dial {
+  position: absolute;
+  top: 0.4rem;
+  left: 0;
+  width: 4.3rem;
+  height: 4.3rem;
+  border: 0.55rem solid #70a6a5;
+  border-radius: 50%;
+  background: #edf7f4;
+  box-shadow: inset 0 0 0 2px #fff;
+  transform: rotate(-16deg);
+}
+
+.calibration-dial span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1.5rem;
+  height: 2px;
+  background: var(--not-fit);
+  transform: rotate(-42deg);
+  transform-origin: left center;
+}
+
+.calibration-dial::after {
+  position: absolute;
+  top: calc(50% - 0.25rem);
+  left: calc(50% - 0.25rem);
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--accent-ink);
   content: "";
-  transform: rotate(-45deg);
-}
-
-.hero-stethoscope {
-  position: absolute;
-  top: 0.5rem;
-  left: 0.3rem;
-  width: 4.8rem;
-  height: 5.2rem;
-  border: 0.5rem solid #67aeb2;
-  border-top: 0;
-  border-radius: 0 0 3rem 3rem;
-  transform: rotate(-25deg);
-}
-
-.hero-stethoscope::before,
-.hero-stethoscope::after {
-  position: absolute;
-  top: -0.8rem;
-  width: 1rem;
-  height: 1rem;
-  border-radius: 50%;
-  background: #67aeb2;
-  content: "";
-}
-
-.hero-stethoscope::before { left: -0.5rem; }
-.hero-stethoscope::after { right: -0.5rem; }
-
-.hero-stethoscope span {
-  position: absolute;
-  right: -0.85rem;
-  bottom: -0.75rem;
-  width: 1.65rem;
-  height: 1.65rem;
-  border: 0.35rem solid #67aeb2;
-  border-radius: 50%;
-  background: #dff2ef;
 }
 
 .hero-kicker {
@@ -789,16 +812,16 @@ a {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 0.78rem;
-  color: var(--scrub);
+  color: var(--calibration);
 }
 
 .hero h1 {
   color: var(--accent-ink);
 }
 
-/* Cards read like patient charts clipped to a clipboard */
+/* Instrument sheets with calibration marks */
 .card {
-  box-shadow: 0 1px 2px rgba(15, 90, 104, 0.05);
+  box-shadow: 0 2px 8px rgba(23, 43, 47, 0.06);
 }
 
 .benchmark-card {
@@ -809,26 +832,24 @@ a {
 .benchmark-card::before {
   content: "";
   position: absolute;
-  top: -11px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 46px;
-  height: 10px;
-  border-radius: 6px 6px 3px 3px;
-  background: #b9d6d5;
-  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.08);
+  top: 0;
+  right: 1rem;
+  width: 72px;
+  height: 8px;
+  background: repeating-linear-gradient(90deg, var(--graph) 0 1px, transparent 1px 8px);
 }
 
-/* Triage wristbands */
-.health-badge {
+/* Use constraints */
+.status-badge {
   letter-spacing: 0.01em;
 }
 
-/* Chips look like pills */
+/* Measurement labels */
 .chip {
-  background: #e4f1f0;
+  border-radius: 3px;
+  background: #e5f1ef;
   color: var(--accent-ink);
-  border: 1px solid #cfe4e3;
+  border: 1px solid var(--line);
 }
 
 .chip-gap {
@@ -837,7 +858,7 @@ a {
   border-color: #f4d9bb;
 }
 
-/* Buttons in scrub teal */
+/* Primary comparison action */
 .compare-action {
   border-color: var(--accent);
   background: var(--accent);
@@ -852,10 +873,10 @@ a {
 }
 
 .profile-grid > div {
-  border-left-color: var(--scrub);
+  border-left-color: var(--accent);
 }
 
-/* Discharge desk footer */
+/* Calibration register footer */
 .site-footer {
   margin-top: 2.5rem;
   border-top: 2px dashed var(--line);
@@ -873,19 +894,25 @@ a {
   color: var(--accent-ink);
 }
 
-.footer-vitals svg {
-  display: block;
+.footer-scale {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
   width: min(240px, 60vw);
-  height: 24px;
-  margin: 0 auto 0.6rem;
+  height: 18px;
+  margin: 0 auto 0.7rem;
+  border-bottom: 2px solid var(--calibration);
 }
 
-.footer-vitals path {
-  fill: none;
-  stroke: var(--red);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.footer-scale span {
+  display: block;
+  width: 2px;
+  height: 9px;
+  background: var(--calibration);
+}
+
+.footer-scale span:nth-child(3) {
+  height: 16px;
 }
 
 .footer-fineprint {
@@ -895,7 +922,7 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .brand-logo .logo-pulse {
+  .brand-logo .logo-trend {
     animation: none;
     stroke-dashoffset: 0;
   }
@@ -911,8 +938,13 @@ a {
   }
 
   .brand-name {
-    font-size: 0.94rem;
+    font-size: 0.8rem;
     white-space: nowrap;
+  }
+
+  .brand-logo {
+    width: 34px;
+    height: 34px;
   }
 
   .brand {
@@ -946,8 +978,8 @@ a {
     font-size: 4rem;
   }
 
-  .scenery-plus-one,
-  .scenery-pill-one {
+  .scenery-axis-one,
+  .scenery-target {
     display: none;
   }
 }

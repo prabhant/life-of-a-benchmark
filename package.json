@@ -1,8 +1,8 @@
 {
-  "name": "benchmarkcards",
+  "name": "benchmark-metrology-lab",
   "version": "1.0.0",
   "private": true,
-  "description": "Benchmark Ward: a hospital-themed static catalog that checks the vitals of LLM evaluation benchmarks, generated from Markdown records.",
+  "description": "An evidence-linked metrology register for LLM evaluation benchmarks, generated from Markdown records.",
   "scripts": {
     "build": "node tools/build.mjs"
   }

@@ -79,7 +79,7 @@
     const table = document.createElement("table");
     table.className = "comparison-table";
     const caption = document.createElement("caption");
-    caption.textContent = "Selected benchmark comparison";
+    caption.textContent = "Selected benchmark measurement comparison";
     table.append(caption);
 
     const header = document.createElement("thead");
@@ -98,17 +98,17 @@
     table.append(header);
 
     const body = document.createElement("tbody");
-    addTextRow(body, "Health", benchmarks, (benchmark) => benchmark.health);
+    addTextRow(body, "Measurement status", benchmarks, (benchmark) => benchmark.measurementStatus);
     addTextRow(body, "Taxonomy", benchmarks, (benchmark) => benchmark.taxonomy);
     addTextRow(body, "Task format", benchmarks, (benchmark) => benchmark.taskFormat);
     addTextRow(body, "Languages", benchmarks, (benchmark) => benchmark.languages);
-    addTextRow(body, "Primary metric", benchmarks, (benchmark) => benchmark.primaryMetric);
+    addTextRow(body, "Scoring rule", benchmarks, (benchmark) => benchmark.scoringRule);
     addTextRow(body, "Saturation risk", benchmarks, (benchmark) => benchmark.saturationRisk);
     addTextRow(body, "Contamination risk", benchmarks, (benchmark) => benchmark.contaminationRisk);
     addTextRow(body, "Reproducibility", benchmarks, (benchmark) => benchmark.reproducibility);
-    addListRow(body, "Recommended use", benchmarks, (benchmark) => benchmark.recommendedUse);
-    addListRow(body, "Avoid when", benchmarks, (benchmark) => benchmark.avoidWhen);
-    addTextRow(body, "Reported critiques", benchmarks, (benchmark) => String(benchmark.knownIssues.length));
+    addListRow(body, "Supported uses", benchmarks, (benchmark) => benchmark.supportedUses);
+    addListRow(body, "Unsupported inferences", benchmarks, (benchmark) => benchmark.unsupportedInferences);
+    addTextRow(body, "Validity threats", benchmarks, (benchmark) => String(benchmark.validityThreats.length));
     addTextRow(body, "Last reviewed", benchmarks, (benchmark) => benchmark.lastReviewed);
     addTextRow(body, "License status", benchmarks, (benchmark) => benchmark.licenseStatus);
     addTextRow(body, "Link status", benchmarks, (benchmark) => benchmark.linkStatus);
@@ -126,7 +126,7 @@
   };
 
   if (selectedSlugs.length < 2) {
-    renderEmptyState("Choose at least two benchmarks from the catalog to begin a comparison.");
+    renderEmptyState("Choose at least two instruments from the register to begin a comparison.");
     return;
   }
 
@@ -143,7 +143,7 @@
         .filter(Boolean);
 
       if (selected.length < 2) {
-        renderEmptyState("Choose at least two valid benchmarks from the catalog to begin a comparison.");
+        renderEmptyState("Choose at least two valid instruments from the register to begin a comparison.");
         return;
       }
 

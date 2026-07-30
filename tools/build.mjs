@@ -9,10 +9,10 @@ const benchmarksDir = path.join(rootDir, "benchmarks");
 const assetsDir = path.join(rootDir, "assets");
 const distDir = path.join(rootDir, "dist");
 
-const HEALTH_COLORS = {
-  green: "\uD83D\uDFE2 Stable",
-  yellow: "\uD83D\uDFE1 Observation",
-  red: "\uD83D\uDD34 Critical"
+const MEASUREMENT_STATUSES = {
+  fit: "Fit for stated use",
+  qualified: "Qualified use",
+  "not-fit": "Not fit for primary inference"
 };
 
 const RISK_LEVELS = new Set(["low", "medium", "high", "unknown"]);
@@ -39,7 +39,7 @@ const REQUIRED_METADATA = [
   ["Taxonomy", "taxonomy"],
   ["Task Format", "taskFormat"],
   ["Languages", "languages"],
-  ["Primary Metric", "primaryMetric"],
+  ["Scoring Rule", "scoringRule"],
   ["Saturation Risk", "saturationRisk"],
   ["Contamination Risk", "contaminationRisk"],
   ["Reproducibility", "reproducibility"],
@@ -143,14 +143,16 @@ const parseMarkdownBenchmark = (filename, raw) => {
     throw new Error(`Missing 'title:' in YAML frontmatter for ${filename}`);
   }
 
-  const healthLine = lines.find((line) => /^Health:\s*/i.test(line.trim()));
-  if (!healthLine) {
-    throw new Error(`Missing 'Health:' line in ${filename}`);
+  const measurementStatusLine = lines.find((line) =>
+    /^Measurement Status:\s*/i.test(line.trim())
+  );
+  if (!measurementStatusLine) {
+    throw new Error(`Missing 'Measurement Status:' line in ${filename}`);
   }
 
-  const health = healthLine.split(":")[1].trim().toLowerCase();
-  if (!HEALTH_COLORS[health]) {
-    throw new Error(`Health must be Green/Yellow/Red in ${filename}`);
+  const measurementStatus = slugify(measurementStatusLine.split(":")[1].trim());
+  if (!MEASUREMENT_STATUSES[measurementStatus]) {
+    throw new Error(`Measurement Status must be Fit/Qualified/Not Fit in ${filename}`);
   }
 
   const slugLine = lines.find((line) => /^Slug:\s*/i.test(line.trim()));
@@ -182,29 +184,29 @@ const parseMarkdownBenchmark = (filename, raw) => {
   }
   flush();
 
-  const description = (sections.description || "").trim();
-  const capabilities = parseBullets(sections.capabilities || "");
-  const timeline = parseBullets(sections.timeline || "");
-  const knownIssues = parseEvidence(sections["known issues"] || "");
-  const evidence = parseEvidence(sections.evidence || "");
-  const successors = parseBullets(sections.successors || "").filter(
-    (successor) => successor.toLowerCase() !== "none listed"
+  const instrumentOverview = (sections["instrument overview"] || "").trim();
+  const measurementTargets = parseBullets(sections["measurement targets"] || "");
+  const evidenceHistory = parseBullets(sections["evidence history"] || "");
+  const validityThreats = parseEvidence(sections["validity threats"] || "");
+  const evidenceRegister = parseEvidence(sections["evidence register"] || "");
+  const alternativeInstruments = parseBullets(sections["alternative instruments"] || "").filter(
+    (instrument) => instrument.toLowerCase() !== "none listed"
   );
-  const recommendedUse = parseBullets(sections["recommended use"] || "");
-  const avoidWhen = parseBullets(sections["avoid when"] || "");
+  const supportedUses = parseBullets(sections["supported uses"] || "");
+  const unsupportedInferences = parseBullets(sections["unsupported inferences"] || "");
 
-  if (!description) {
-    throw new Error(`Missing Description section content in ${filename}`);
+  if (!instrumentOverview) {
+    throw new Error(`Missing Instrument Overview section content in ${filename}`);
   }
 
-  const unsupportedIssue = knownIssues.find((issue) => !issue.url);
-  if (unsupportedIssue) {
+  const unsupportedThreat = validityThreats.find((threat) => !threat.url);
+  if (unsupportedThreat) {
     throw new Error(
-      `Known issue must link directly to supporting evidence in ${filename}: ${unsupportedIssue.label}`
+      `Validity threat must link directly to supporting evidence in ${filename}: ${unsupportedThreat.label}`
     );
   }
 
-  const incompleteEvidence = evidence.find(
+  const incompleteEvidence = evidenceRegister.find(
     (source) => !source.url || !source.type || !source.year || !source.scope
   );
   if (incompleteEvidence) {
@@ -213,42 +215,41 @@ const parseMarkdownBenchmark = (filename, raw) => {
     );
   }
 
-  const unsupportedSourceType = evidence.find((source) => !SOURCE_TYPES.has(source.type));
+  const unsupportedSourceType = evidenceRegister.find((source) => !SOURCE_TYPES.has(source.type));
   if (unsupportedSourceType) {
     throw new Error(`Unsupported evidence type in ${filename}: ${unsupportedSourceType.type}`);
   }
 
-  const invalidEvidenceYear = evidence.find((source) => !/^\d{4}$/.test(source.year));
+  const invalidEvidenceYear = evidenceRegister.find((source) => !/^\d{4}$/.test(source.year));
   if (invalidEvidenceYear) {
     throw new Error(`Evidence year must use YYYY in ${filename}: ${invalidEvidenceYear.label}`);
   }
 
-  const unregisteredCritique = knownIssues.find(
-    (issue) => !evidence.some((source) => source.url === issue.url)
+  const unregisteredThreat = validityThreats.find(
+    (threat) => !evidenceRegister.some((source) => source.url === threat.url)
   );
-  if (unregisteredCritique) {
+  if (unregisteredThreat) {
     throw new Error(
-      `Known issue evidence must also appear in Evidence in ${filename}: ${unregisteredCritique.label}`
+      `Validity threat evidence must also appear in Evidence Register in ${filename}: ${unregisteredThreat.label}`
     );
   }
 
-  if (!recommendedUse.length || !avoidWhen.length) {
-    throw new Error(`Recommended Use and Avoid When require at least one entry in ${filename}`);
+  if (!supportedUses.length || !unsupportedInferences.length) {
+    throw new Error(`Supported Uses and Unsupported Inferences require at least one entry in ${filename}`);
   }
 
   return {
     title,
     slug,
-    health,
-    description,
-    capabilities,
-    timeline,
-    knownIssues,
-    evidence,
-    successors
-    ,
-    recommendedUse,
-    avoidWhen,
+    measurementStatus,
+    instrumentOverview,
+    measurementTargets,
+    evidenceHistory,
+    validityThreats,
+    evidenceRegister,
+    alternativeInstruments,
+    supportedUses,
+    unsupportedInferences,
     ...metadata
   };
 };
@@ -309,15 +310,15 @@ const titleCase = (value) => value.charAt(0).toUpperCase() + value.slice(1);
 const renderRiskValue = (value) =>
   `<span class="risk-value risk-${htmlEscape(value)}">${htmlEscape(titleCase(value))}</span>`;
 
-const renderDecisionProfile = (benchmark) => `
+const renderMeasurementProfile = (benchmark) => `
 <dl class="profile-grid">
-  <div><dt>Health</dt><dd><span class="health-badge health-${htmlEscape(benchmark.health)}">${htmlEscape(
-    HEALTH_COLORS[benchmark.health]
+  <div><dt>Measurement status</dt><dd><span class="status-badge status-${htmlEscape(benchmark.measurementStatus)}">${htmlEscape(
+    MEASUREMENT_STATUSES[benchmark.measurementStatus]
   )}</span></dd></div>
   <div><dt>Taxonomy</dt><dd>${htmlEscape(benchmark.taxonomy)}</dd></div>
   <div><dt>Task format</dt><dd>${htmlEscape(benchmark.taskFormat)}</dd></div>
   <div><dt>Languages</dt><dd>${htmlEscape(benchmark.languages)}</dd></div>
-  <div><dt>Primary metric</dt><dd>${htmlEscape(benchmark.primaryMetric)}</dd></div>
+  <div><dt>Scoring rule</dt><dd>${htmlEscape(benchmark.scoringRule)}</dd></div>
   <div><dt>Saturation risk</dt><dd>${renderRiskValue(benchmark.saturationRisk)}</dd></div>
   <div><dt>Contamination risk</dt><dd>${renderRiskValue(benchmark.contaminationRisk)}</dd></div>
   <div><dt>Reproducibility</dt><dd>${renderRiskValue(benchmark.reproducibility)}</dd></div>
@@ -362,12 +363,11 @@ const pageShell = (
   ${extraHead}
 </head>
 <body>
-  <div class="clinic-scenery" aria-hidden="true">
-    <span class="scenery-plus scenery-plus-one"></span>
-    <span class="scenery-plus scenery-plus-two"></span>
-    <span class="scenery-pill scenery-pill-one"></span>
-    <span class="scenery-pill scenery-pill-two"></span>
-    <span class="scenery-pulse"></span>
+  <div class="measurement-scenery" aria-hidden="true">
+    <span class="scenery-axis scenery-axis-one"></span>
+    <span class="scenery-axis scenery-axis-two"></span>
+    <span class="scenery-target"></span>
+    <span class="scenery-error-bar"></span>
   </div>
   <header class="site-header">
     <div class="container">
@@ -375,19 +375,18 @@ const pageShell = (
         <span class="brand-logo" aria-hidden="true">
           <svg viewBox="0 0 40 40" role="img" focusable="false">
             <rect x="1" y="1" width="38" height="38" rx="9" class="logo-bg" />
-            <path class="logo-pulse" d="M4 21 h7 l3 -9 l5 17 l4 -12 l3 4 h7" />
-            <g class="logo-cross">
-              <rect x="26" y="6" width="8" height="8" rx="2" />
-              <rect x="28.5" y="3.5" width="3" height="13" rx="1.2" />
-              <rect x="23.5" y="8.5" width="13" height="3" rx="1.2" />
-            </g>
+            <path class="logo-axis" d="M9 8 v24 h24" />
+            <path class="logo-trend" d="M11 27 l6 -7 l5 3 l8 -11" />
+            <circle class="logo-point" cx="17" cy="20" r="2" />
+            <circle class="logo-point" cx="22" cy="23" r="2" />
+            <circle class="logo-point" cx="30" cy="12" r="2" />
           </svg>
         </span>
-        <span class="brand-name">Benchmark Ward</span>
+        <span class="brand-name">Benchmark Metrology Lab</span>
       </a>
       <nav aria-label="Primary navigation">
-        <a href="${htmlEscape(homeHref)}">\uD83D\uDECF\uFE0F Ward</a>
-        <a href="${htmlEscape(compareHref)}">\uD83D\uDCCB Compare Charts</a>
+        <a href="${htmlEscape(homeHref)}">Register</a>
+        <a href="${htmlEscape(compareHref)}">Compare</a>
       </nav>
     </div>
   </header>
@@ -396,13 +395,9 @@ const pageShell = (
   </main>
   <footer class="site-footer">
     <div class="container">
-      <p class="footer-vitals" aria-hidden="true">
-        <svg viewBox="0 0 240 24" role="img" focusable="false">
-          <path d="M0 12 h60 l6 -9 l8 18 l7 -14 l5 5 h149" />
-        </svg>
-      </p>
-      <p><span aria-hidden="true">\uD83C\uDFE5</span> <strong>Benchmark Ward</strong> \u2014 visiting hours 24/7. Please sanitize your prompts on entry.</p>
-      <p class="footer-fineprint">Not a real hospital. No benchmarks were harmed in the making of this catalog, except the saturated ones (they were gently discharged).</p>
+      <div class="footer-scale" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+      <p><strong>Benchmark Metrology Lab</strong> documents what evaluation instruments can and cannot support.</p>
+      <p class="footer-fineprint">Status labels are editorial assessments. Follow the evidence register before drawing conclusions.</p>
     </div>
   </footer>
   ${inlineScript}
@@ -424,31 +419,31 @@ const renderHome = async (benchmarks) => {
   const cards = benchmarks
     .map((benchmark) => {
       const shortDescription =
-        benchmark.description.length > 190
-          ? `${benchmark.description.slice(0, 190)}...`
-          : benchmark.description;
+        benchmark.instrumentOverview.length > 190
+          ? `${benchmark.instrumentOverview.slice(0, 190)}...`
+          : benchmark.instrumentOverview;
 
       return `<article class="card benchmark-card" data-title="${htmlEscape(
         benchmark.title.toLowerCase()
-      )}" data-health="${htmlEscape(benchmark.health)}" data-taxonomy="${htmlEscape(
+      )}" data-measurement-status="${htmlEscape(benchmark.measurementStatus)}" data-taxonomy="${htmlEscape(
         benchmark.taxonomy
       )}" data-saturation-risk="${htmlEscape(
         benchmark.saturationRisk
       )}" data-contamination-risk="${htmlEscape(benchmark.contaminationRisk)}" data-content="${htmlEscape(
-        `${benchmark.description} ${benchmark.capabilities.join(" ")} ${benchmark.recommendedUse.join(
+        `${benchmark.instrumentOverview} ${benchmark.measurementTargets.join(" ")} ${benchmark.supportedUses.join(
           " "
-        )} ${benchmark.avoidWhen.join(" ")} ${benchmark.knownIssues
-          .map((issue) => issue.label)
-          .join(" ")} ${benchmark.taxonomy} ${benchmark.taskFormat} ${benchmark.primaryMetric}`.toLowerCase()
+        )} ${benchmark.unsupportedInferences.join(" ")} ${benchmark.validityThreats
+          .map((threat) => threat.label)
+          .join(" ")} ${benchmark.taxonomy} ${benchmark.taskFormat} ${benchmark.scoringRule}`.toLowerCase()
       )}">
   <div class="card-top">
     <h2><a href="benchmarks/${htmlEscape(benchmark.slug)}/">${htmlEscape(benchmark.title)}</a></h2>
-    <span class="health-badge health-${htmlEscape(benchmark.health)}">${htmlEscape(HEALTH_COLORS[benchmark.health])}</span>
+    <span class="status-badge status-${htmlEscape(benchmark.measurementStatus)}">${htmlEscape(MEASUREMENT_STATUSES[benchmark.measurementStatus])}</span>
   </div>
   <p>${htmlEscape(shortDescription)}</p>
   <p class="card-meta">${htmlEscape(benchmark.taxonomy)} · ${htmlEscape(benchmark.taskFormat)}</p>
   <div class="chip-row">
-    ${benchmark.capabilities
+    ${benchmark.measurementTargets
       .slice(0, 4)
       .map((capability) => `<span class="chip">${htmlEscape(capability)}</span>`)
       .join("")}
@@ -463,24 +458,26 @@ const renderHome = async (benchmarks) => {
   const body = `
 <section class="hero">
   <div class="hero-illustration" aria-hidden="true">
-    <div class="hero-chart">
-      <span class="chart-clip"></span>
-      <span class="chart-line chart-line-long"></span>
-      <span class="chart-line"></span>
-      <span class="chart-line chart-line-short"></span>
-      <span class="chart-check"></span>
+    <div class="calibration-plot">
+      <span class="plot-axis plot-axis-x"></span>
+      <span class="plot-axis plot-axis-y"></span>
+      <span class="plot-trend"></span>
+      <span class="plot-point plot-point-one"></span>
+      <span class="plot-point plot-point-two"></span>
+      <span class="plot-point plot-point-three"></span>
+      <span class="uncertainty-bar"></span>
     </div>
-    <div class="hero-stethoscope"><span></span></div>
+    <div class="calibration-dial"><span></span></div>
   </div>
-  <p class="hero-kicker"><span aria-hidden="true">\uD83C\uDFE5</span> Now admitting</p>
-  <h1>Benchmark Ward</h1>
-  <p>The intensive care unit for LLM evaluation benchmarks. We take their vitals, read their charts, and flag the ones flatlining from saturation and contamination.</p>
+  <p class="hero-kicker">Measurement register</p>
+  <h1>Benchmark Metrology Lab</h1>
+  <p>An evidence-linked instrument registry for LLM evaluation. Examine what each benchmark measures, where its scores remain valid, and which threats qualify interpretation.</p>
 </section>
 
 <section class="controls card" aria-label="Benchmark filters">
   <div class="filter-field filter-search">
     <label for="searchInput">Search</label>
-    <input id="searchInput" type="search" placeholder="Search benchmarks, methods, or critiques" />
+    <input id="searchInput" type="search" placeholder="Search instruments, methods, or validity threats" />
   </div>
   <div class="filter-field">
     <label for="taxonomyFilter">Taxonomy</label>
@@ -490,12 +487,12 @@ const renderHome = async (benchmarks) => {
     </select>
   </div>
   <div class="filter-field">
-    <label for="healthFilter">Health</label>
-    <select id="healthFilter">
-      <option value="all">All health levels</option>
-      <option value="green">Green</option>
-      <option value="yellow">Yellow</option>
-      <option value="red">Red</option>
+    <label for="measurementStatusFilter">Measurement status</label>
+    <select id="measurementStatusFilter">
+      <option value="all">All statuses</option>
+      <option value="fit">Fit for stated use</option>
+      <option value="qualified">Qualified use</option>
+      <option value="not-fit">Not fit for primary inference</option>
     </select>
   </div>
   <div class="filter-field">
@@ -522,8 +519,8 @@ const renderHome = async (benchmarks) => {
 </section>
 
 <section class="selection-summary" aria-live="polite">
-  <p id="comparisonCount">Select 2 to 5 patients for a joint consult.</p>
-  <a id="compareLink" class="compare-action is-disabled" href="compare/" aria-disabled="true">Send to consult</a>
+  <p id="comparisonCount">Select 2 to 5 instruments for comparative assessment.</p>
+  <a id="compareLink" class="compare-action is-disabled" href="compare/" aria-disabled="true">Compare instruments</a>
 </section>
 
 <section id="benchmarkGrid" class="grid">
@@ -531,14 +528,14 @@ const renderHome = async (benchmarks) => {
 </section>
 
 <section class="coverage-section" aria-labelledby="coverage-heading">
-  <h2 id="coverage-heading">Ward Census</h2>
+  <h2 id="coverage-heading">Measurement Coverage</h2>
   <div class="coverage-grid">
     <div>
-      <h3>Departments on call</h3>
+      <h3>Represented domains</h3>
       <div class="chip-row">${coverageTaxonomies}</div>
     </div>
     <div>
-      <h3>Beds still empty</h3>
+      <h3>Coverage gaps</h3>
       <div class="chip-row">${coverageGaps}</div>
     </div>
   </div>
@@ -549,7 +546,7 @@ const renderHome = async (benchmarks) => {
 ${await readFile(path.join(assetsDir, "search.js"), "utf8")}
 </script>`;
 
-  return pageShell("Benchmark Ward", body, {
+  return pageShell("Benchmark Metrology Lab", body, {
     homeHref: "./",
     compareHref: "compare/",
     assetPrefix: "./assets",
@@ -558,11 +555,11 @@ ${await readFile(path.join(assetsDir, "search.js"), "utf8")}
 };
 
 const renderBenchmarkPage = (benchmark, benchmarksBySlug, benchmarksByTitle) => {
-  const resolvedSuccessors = benchmark.successors.map((successor) => {
-    const key = successor.toLowerCase();
+  const resolvedAlternatives = benchmark.alternativeInstruments.map((instrument) => {
+    const key = instrument.toLowerCase();
     const found = benchmarksBySlug.get(slugify(key)) || benchmarksByTitle.get(key);
     if (!found) {
-      return `<li>${htmlEscape(successor)}</li>`;
+      return `<li>${htmlEscape(instrument)}</li>`;
     }
     return `<li><a href="../${htmlEscape(found.slug)}/">${htmlEscape(found.title)}</a></li>`;
   });
@@ -572,71 +569,71 @@ const renderBenchmarkPage = (benchmark, benchmarksBySlug, benchmarksByTitle) => 
   <a class="back-link" href="../../">← Back to all benchmarks</a>
   <header class="detail-header">
     <h1>${htmlEscape(benchmark.title)}</h1>
-    <span class="health-badge health-${htmlEscape(benchmark.health)}">${htmlEscape(HEALTH_COLORS[benchmark.health])}</span>
+    <span class="status-badge status-${htmlEscape(benchmark.measurementStatus)}">${htmlEscape(MEASUREMENT_STATUSES[benchmark.measurementStatus])}</span>
   </header>
 
   <section class="card">
-    <h2>Description</h2>
-    ${renderDescription(benchmark.description)}
+    <h2>Instrument Overview</h2>
+    ${renderDescription(benchmark.instrumentOverview)}
   </section>
 
   <section class="card">
-    <h2>Decision Profile</h2>
-    <p class="section-note">Health is a catalog assessment: Green is suitable as a primary signal, Yellow needs companion evaluations, and Red should not be used as primary evidence. Unknown risk means the catalog has not documented enough evidence to assign a level.</p>
-    ${renderDecisionProfile(benchmark)}
+    <h2>Measurement Profile</h2>
+    <p class="section-note">Measurement status is an editorial assessment: Fit supports the stated use, Qualified requires companion evaluations or interpretive constraints, and Not fit should not support primary inference. Unknown risk means the register lacks enough documented evidence to assign a level.</p>
+    ${renderMeasurementProfile(benchmark)}
   </section>
 
   <section class="card guidance-card">
-    <h2>Catalog Guidance</h2>
+    <h2>Interpretation Guidance</h2>
     <div class="guidance-grid">
       <div>
-        <h3>Recommended use</h3>
-        ${renderList(benchmark.recommendedUse.map((item) => htmlEscape(item)))}
+        <h3>Supported uses</h3>
+        ${renderList(benchmark.supportedUses.map((item) => htmlEscape(item)))}
       </div>
       <div>
-        <h3>Avoid when</h3>
-        ${renderList(benchmark.avoidWhen.map((item) => htmlEscape(item)))}
+        <h3>Unsupported inferences</h3>
+        ${renderList(benchmark.unsupportedInferences.map((item) => htmlEscape(item)))}
       </div>
     </div>
   </section>
 
   <section class="card">
-    <h2>Capabilities</h2>
-    ${renderList(benchmark.capabilities.map((item) => htmlEscape(item)))}
+    <h2>Measurement Targets</h2>
+    ${renderList(benchmark.measurementTargets.map((item) => htmlEscape(item)))}
   </section>
 
   <section class="card">
-    <h2>Timeline</h2>
-    ${renderList(benchmark.timeline.map((item) => htmlEscape(item)))}
+    <h2>Evidence History</h2>
+    ${renderList(benchmark.evidenceHistory.map((item) => htmlEscape(item)))}
   </section>
 
   <section class="card">
-    <h2>Reported Critiques</h2>
-    <p class="section-note">Each limitation links to evidence listed in the sources below.</p>
-    ${renderEvidenceList(benchmark.knownIssues)}
+    <h2>Validity Threats</h2>
+    <p class="section-note">Each reported threat links to an entry in the evidence register below.</p>
+    ${renderEvidenceList(benchmark.validityThreats)}
   </section>
 
   <section class="card">
-    <h2>Sources</h2>
-    ${renderEvidenceList(benchmark.evidence)}
+    <h2>Evidence Register</h2>
+    ${renderEvidenceList(benchmark.evidenceRegister)}
   </section>
 
   <section class="card">
-    <h2>Governance</h2>
+    <h2>Assessment Governance</h2>
     ${renderGovernance(benchmark)}
   </section>
 
   <section class="card">
-    <h2>Successors</h2>
+    <h2>Alternative Instruments</h2>
     ${
-      resolvedSuccessors.length
-        ? `<ul>${resolvedSuccessors.join("")}</ul>`
-        : '<p class="empty">No documented successor.</p>'
+      resolvedAlternatives.length
+        ? `<ul>${resolvedAlternatives.join("")}</ul>`
+        : '<p class="empty">No documented alternative instrument.</p>'
     }
   </section>
 </article>`;
 
-  return pageShell(`${benchmark.title} \u2022 Benchmark Ward`, body, {
+  return pageShell(`${benchmark.title} \u2022 Benchmark Metrology Lab`, body, {
     homeHref: "../../",
     compareHref: "../../compare/",
     assetPrefix: "../../assets"
@@ -646,15 +643,15 @@ const renderBenchmarkPage = (benchmark, benchmarksBySlug, benchmarksByTitle) => 
 const renderComparePage = () => {
   const body = `
 <section class="compare-header">
-  <h1>Compare Charts</h1>
-  <p id="compareStatus" aria-live="polite">Select 2 to 5 patients from the ward for a joint consult.</p>
+  <h1>Compare Instruments</h1>
+  <p id="compareStatus" aria-live="polite">Select 2 to 5 benchmarks from the instrument register for comparative assessment.</p>
 </section>
 
 <section class="comparison-surface" aria-live="polite">
   <div id="comparisonTable"></div>
 </section>`;
 
-  return pageShell("Compare Charts \u2022 Benchmark Ward", body, {
+  return pageShell("Compare Instruments \u2022 Benchmark Metrology Lab", body, {
     homeHref: "../",
     compareHref: "./",
     assetPrefix: "../assets",
@@ -694,19 +691,19 @@ const createSite = async () => {
   const payload = benchmarks.map((benchmark) => ({
     title: benchmark.title,
     slug: benchmark.slug,
-    health: benchmark.health,
-    description: benchmark.description,
-    capabilities: benchmark.capabilities,
-    timeline: benchmark.timeline,
-    knownIssues: benchmark.knownIssues,
-    evidence: benchmark.evidence,
-    successors: benchmark.successors,
-    recommendedUse: benchmark.recommendedUse,
-    avoidWhen: benchmark.avoidWhen,
+    measurementStatus: MEASUREMENT_STATUSES[benchmark.measurementStatus],
+    instrumentOverview: benchmark.instrumentOverview,
+    measurementTargets: benchmark.measurementTargets,
+    evidenceHistory: benchmark.evidenceHistory,
+    validityThreats: benchmark.validityThreats,
+    evidenceRegister: benchmark.evidenceRegister,
+    alternativeInstruments: benchmark.alternativeInstruments,
+    supportedUses: benchmark.supportedUses,
+    unsupportedInferences: benchmark.unsupportedInferences,
     taxonomy: benchmark.taxonomy,
     taskFormat: benchmark.taskFormat,
     languages: benchmark.languages,
-    primaryMetric: benchmark.primaryMetric,
+    scoringRule: benchmark.scoringRule,
     saturationRisk: benchmark.saturationRisk,
     contaminationRisk: benchmark.contaminationRisk,
     reproducibility: benchmark.reproducibility,
@@ -724,4 +721,4 @@ const createSite = async () => {
 };
 
 await createSite();
-console.log("\uD83C\uDFE5 Built Benchmark Ward into dist/");
+console.log("Built Benchmark Metrology Lab into dist/");
