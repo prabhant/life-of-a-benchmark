@@ -3,12 +3,31 @@ title: GSM8K
 description: Benchmark record for grade-school mathematical reasoning
 ---
 
-# GSM8K
 Slug: gsm8k
 Health: Yellow
+Taxonomy: Mathematical reasoning
+Task Format: Free-response word problems
+Languages: English
+Primary Metric: Exact-match accuracy
+Saturation Risk: High
+Contamination Risk: High
+Reproducibility: Medium
+Last Reviewed: 2026-07-30
+Reviewer: BenchmarkCards editorial review
+Canonical Source: https://arxiv.org/abs/2110.14168
+License Status: Verify upstream terms before use
+Link Status: URL syntax validated; availability checked weekly
 
 ## Description
 GSM8K is a dataset of 8,500 grade-school mathematics word problems designed to evaluate multi-step mathematical reasoning in natural language. It is a useful baseline, although it is now a weak discriminator among frontier models.
+
+## Recommended Use
+- Tracking regressions in grade-school mathematical reasoning
+- Comparing prompting and verification approaches with perturbation tests
+
+## Avoid When
+- Claiming robust mathematical reasoning from the original task alone
+- Selecting between frontier systems without harder or private math tasks
 
 ## Capabilities
 - Multi-step arithmetic reasoning
@@ -22,14 +41,14 @@ GSM8K is a dataset of 8,500 grade-school mathematics word problems designed to e
 - 2024: GSM-Symbolic tested whether high scores reflect robust reasoning.
 
 ## Known Issues
-- [Performance drops when names and values are changed through symbolic perturbations.](https://arxiv.org/abs/2410.05229)
-- [Models can fail when irrelevant but plausible information is added to problems.](https://arxiv.org/abs/2410.05229)
-- [Public benchmark exposure creates a risk of data contamination.](https://arxiv.org/abs/2311.09783)
+- [Across 50 sets of 100 template-derived questions, worst-to-best accuracy varied by over 12 points for Gemma2-9B and about 15 points for Phi-3.5-mini despite unchanged solution structure.](https://arxiv.org/abs/2410.05229)
+- [On GSM-NoOp, adding irrelevant but plausible information reduced Phi-3-mini accuracy from 80.7% to 18.0%.](https://arxiv.org/abs/2410.05229)
+- [For GPT-4 specifically, OpenAI mixed GSM8K training data into training and estimated about 1% test-set contamination from 1,000 sampled examples.](https://arxiv.org/abs/2303.08774)
 
 ## Evidence
-- [Original GSM8K paper](https://arxiv.org/abs/2110.14168)
-- [GPT-4 technical report](https://arxiv.org/abs/2303.08774)
-- [GSM-Symbolic](https://arxiv.org/abs/2410.05229)
+- [Original GSM8K paper | original | 2021 | benchmark definition](https://arxiv.org/abs/2110.14168)
+- [GPT-4 technical report | adoption | 2023 | reported result and contamination disclosure](https://arxiv.org/abs/2303.08774)
+- [GSM-Symbolic | critique | 2024 | robustness to perturbation](https://arxiv.org/abs/2410.05229)
 
 ## Successors
 - MATH

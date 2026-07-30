@@ -3,12 +3,31 @@ title: ARC-Challenge
 description: Benchmark record for scientific reasoning
 ---
 
-# ARC-Challenge
 Slug: arc-challenge
 Health: Yellow
+Taxonomy: Scientific reasoning
+Task Format: Multiple choice
+Languages: English
+Primary Metric: Accuracy
+Saturation Risk: Unknown
+Contamination Risk: Unknown
+Reproducibility: Medium
+Last Reviewed: 2026-07-30
+Reviewer: BenchmarkCards editorial review
+Canonical Source: https://arxiv.org/abs/1803.05457
+License Status: Verify upstream terms before use
+Link Status: URL syntax validated; availability checked weekly
 
 ## Description
 ARC-Challenge is the difficult subset of the AI2 Reasoning Challenge, a collection of grade-school science questions designed to test scientific knowledge and reasoning.
+
+## Recommended Use
+- Measuring a science-reasoning baseline within a broader suite
+- Comparing multiple-choice and direct-answer science evaluation
+
+## Avoid When
+- Treating option selection as proof of free-form scientific reasoning
+- Using a multiple-choice result without inspecting direct-answer performance
 
 ## Capabilities
 - Grade-school scientific reasoning
@@ -19,17 +38,11 @@ ARC-Challenge is the difficult subset of the AI2 Reasoning Challenge, a collecti
 ## Timeline
 - 2018: The AI2 Reasoning Challenge was introduced.
 - 2023: GPT-4 reported ARC results.
-- 2024: ARC-DA compared multiple-choice evaluation with direct answers.
-
-## Known Issues
-- [Multiple-choice options introduce artifacts that models can exploit.](https://arxiv.org/abs/2402.11872)
-- [Direct-answer versions are significantly harder than the original multiple-choice task.](https://arxiv.org/abs/2402.11872)
 
 ## Evidence
-- [Original ARC paper](https://arxiv.org/abs/1803.05457)
-- [GPT-4 technical report](https://arxiv.org/abs/2303.08774)
-- [Llama 3 model report](https://arxiv.org/abs/2407.21783)
-- [ARC-DA](https://arxiv.org/abs/2402.11872)
+- [Original ARC paper | original | 2018 | benchmark definition](https://arxiv.org/abs/1803.05457)
+- [GPT-4 technical report | adoption | 2023 | reported model result](https://arxiv.org/abs/2303.08774)
+- [Llama 3 model report | adoption | 2024 | reported model result](https://arxiv.org/abs/2407.21783)
 
 ## Successors
-- ARC-DA
+- None listed

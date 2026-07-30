@@ -1,0 +1,27 @@
+name: Validate Benchmark Links
+
+on:
+  push:
+    paths:
+      - "README.md"
+      - "benchmarks/**/*.md"
+      - ".github/workflows/link-check.yml"
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check external links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress README.md benchmarks/**/*.md
+          fail: true
