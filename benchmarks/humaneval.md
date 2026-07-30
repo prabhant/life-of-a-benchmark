@@ -1,0 +1,61 @@
+---
+title: HumanEval
+description: Benchmark record for functional Python code generation
+---
+
+Slug: humaneval
+Health: Yellow
+Taxonomy: Code generation
+Task Format: Python function synthesis from docstrings
+Languages: English and Python
+Primary Metric: pass@k functional correctness
+Saturation Risk: High
+Contamination Risk: Unknown
+Reproducibility: High
+Last Reviewed: 2026-07-30
+Reviewer: BenchmarkCards editorial review
+Canonical Source: https://arxiv.org/abs/2107.03374
+License Status: Verify upstream terms before use
+Link Status: URL syntax validated; availability checked weekly
+
+## Description
+
+HumanEval evaluates code-generation models by asking them to complete Python
+functions from docstrings and then executing hidden unit tests. The original
+benchmark contains 164 handwritten programming problems and reports functional
+correctness using pass@k.
+
+## Recommended Use
+
+- Measuring Python function-synthesis performance with execution-based scoring
+- Pairing with repository-level software-engineering evaluations
+
+## Avoid When
+
+- Treating a small unit-test suite as proof of production correctness or security
+- Comparing systems without matching sampling budgets and pass@k settings
+
+## Capabilities
+
+- Python code generation
+- Docstring-to-function synthesis
+- Execution-based functional correctness
+- Sampling-based code selection
+
+## Timeline
+
+- 2021: HumanEval was released with the Codex evaluation study.
+- 2023: EvalPlus introduced HumanEval+ with augmented tests.
+
+## Known Issues
+
+- [EvalPlus expanded HumanEval test cases by 80x and, across 26 models, found previously undetected wrong code that reduced pass@k by up to 19.3-28.9%.](https://arxiv.org/abs/2305.01210)
+
+## Evidence
+
+- [Evaluating Large Language Models Trained on Code | original | 2021 | HumanEval design and pass@k evaluation](https://arxiv.org/abs/2107.03374)
+- [EvalPlus | critique | 2023 | test-suite adequacy and score changes](https://arxiv.org/abs/2305.01210)
+
+## Successors
+
+- HumanEval+

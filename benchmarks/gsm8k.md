@@ -44,11 +44,13 @@ GSM8K is a dataset of 8,500 grade-school mathematics word problems designed to e
 - [Across 50 sets of 100 template-derived questions, worst-to-best accuracy varied by over 12 points for Gemma2-9B and about 15 points for Phi-3.5-mini despite unchanged solution structure.](https://arxiv.org/abs/2410.05229)
 - [On GSM-NoOp, adding irrelevant but plausible information reduced Phi-3-mini accuracy from 80.7% to 18.0%.](https://arxiv.org/abs/2410.05229)
 - [For GPT-4 specifically, OpenAI mixed GSM8K training data into training and estimated about 1% test-set contamination from 1,000 sampled examples.](https://arxiv.org/abs/2303.08774)
+- [On the 1,205-problem, human-authored GSM1K comparison set, the worst tested models scored up to 8 percentage points below GSM8K; the authors report a Spearman correlation of 0.36 between GSM8K likelihood and that performance gap, which they interpret as evidence consistent with partial memorization rather than proof of contamination.](https://openreview.net/forum?id=RJZRhMzZzH&noteId=lhsKVGcqg5)
 
 ## Evidence
 - [Original GSM8K paper | original | 2021 | benchmark definition](https://arxiv.org/abs/2110.14168)
 - [GPT-4 technical report | adoption | 2023 | reported result and contamination disclosure](https://arxiv.org/abs/2303.08774)
 - [GSM-Symbolic | critique | 2024 | robustness to perturbation](https://arxiv.org/abs/2410.05229)
+- [A Careful Examination of Large Language Model Performance on Grade School Arithmetic | critique | 2024 | GSM1K comparison and possible GSM8K overfitting](https://openreview.net/forum?id=RJZRhMzZzH&noteId=lhsKVGcqg5)
 
 ## Successors
 - MATH
