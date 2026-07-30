@@ -47,7 +47,7 @@ MT-Bench evaluates multi-turn chat assistants with an LLM judge, while Chatbot A
 
 ## Evidence
 - [MT-Bench and Chatbot Arena paper | original | 2023 | evaluation design and judge bias](https://arxiv.org/abs/2306.05685)
-- [LMSYS Chatbot Arena | leaderboard | 2023 | public preference data](https://chat.lmsys.org)
+- [LM Arena | leaderboard | 2023 | public preference data](https://arena.ai/)
 
 ## Successors
 - Chatbot Arena
