@@ -345,36 +345,36 @@ const renderDescription = (description) => {
 const pageShell = (
   title,
   content,
-  options = {
-    homeHref: "./",
-    compareHref: "compare/",
-    assetPrefix: "./assets",
-    extraHead: "",
-    inlineScript: ""
-  }
+  {
+    homeHref = "./",
+    compareHref = "compare/",
+    assetPrefix = "./assets",
+    extraHead = "",
+    inlineScript = ""
+  } = {}
 ) => `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${htmlEscape(title)}</title>
-  <link rel="stylesheet" href="${htmlEscape(options.assetPrefix)}/styles.css" />
-  ${options.extraHead}
+  <link rel="stylesheet" href="${htmlEscape(assetPrefix)}/styles.css" />
+  ${extraHead}
 </head>
 <body>
   <header class="site-header">
     <div class="container">
-      <a href="${htmlEscape(options.homeHref)}" class="brand">BenchmarkCards</a>
+      <a href="${htmlEscape(homeHref)}" class="brand">BenchmarkCards</a>
       <nav aria-label="Primary navigation">
-        <a href="${htmlEscape(options.homeHref)}">Benchmarks</a>
-        <a href="${htmlEscape(options.compareHref)}">Compare</a>
+        <a href="${htmlEscape(homeHref)}">Benchmarks</a>
+        <a href="${htmlEscape(compareHref)}">Compare</a>
       </nav>
     </div>
   </header>
   <main class="container">
     ${content}
   </main>
-  ${options.inlineScript}
+  ${inlineScript}
 </body>
 </html>
 `;
