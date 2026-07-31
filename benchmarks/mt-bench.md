@@ -4,7 +4,7 @@ description: Benchmark record for conversational assistant quality
 ---
 
 Slug: mt-bench
-Measurement Status: Qualified
+Measurement Status: Not Fit
 Taxonomy: Conversational quality and preference
 Task Format: Multi-turn chat and pairwise preference
 Languages: English

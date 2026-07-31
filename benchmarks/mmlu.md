@@ -4,7 +4,7 @@ description: Benchmark record for Massive Multitask Language Understanding
 ---
 
 Slug: mmlu
-Measurement Status: Qualified
+Measurement Status: Not Fit
 Taxonomy: Knowledge and reasoning
 Task Format: Multiple choice
 Languages: English

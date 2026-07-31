@@ -29,6 +29,7 @@ independent review.
 * `benchmarks/`: benchmark measurement records
 * `assets/`: shared CSS and browser-side search and filtering JavaScript
 * `papers/`: downloaded PDFs, page-delimited extracted text, and evidence indexes
+* `METHODOLOGY.md`: evidence gate and measurement-status decision procedure
 * `tools/build.mjs`: static page generator
 * `dist/`: generated deployment artifact
 
@@ -70,6 +71,10 @@ Measurement status is an editorial assessment. Use `Fit` when the documented
 evidence supports the stated use, `Qualified` when interpretation requires
 companion evaluations or explicit constraints, and `Not Fit` when the benchmark
 should not support primary inference.
+
+The full classification procedure, evidence gate, and red decision rule are in
+[Measurement Status Methodology](METHODOLOGY.md). The generated site publishes
+the same material at `/methodology/` with the current evidence-linked red register.
 
 Interpretation guidance is editorial and appears separately from reported
 validity threats. Every threat must be a direct Markdown link, and its URL must

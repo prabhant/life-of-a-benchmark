@@ -4,7 +4,7 @@ description: Benchmark record for difficult multi-task reasoning
 ---
 
 Slug: bbh
-Measurement Status: Qualified
+Measurement Status: Not Fit
 Taxonomy: General reasoning
 Task Format: Mixed task suite
 Languages: English

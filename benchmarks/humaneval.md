@@ -4,7 +4,7 @@ description: Benchmark record for functional Python code generation
 ---
 
 Slug: humaneval
-Measurement Status: Qualified
+Measurement Status: Not Fit
 Taxonomy: Code generation
 Task Format: Single-turn Python function synthesis from docstrings
 Languages: English prompts and Python output

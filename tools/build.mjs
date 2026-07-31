@@ -8,6 +8,7 @@ const rootDir = path.resolve(__dirname, "..");
 const benchmarksDir = path.join(rootDir, "benchmarks");
 const assetsDir = path.join(rootDir, "assets");
 const distDir = path.join(rootDir, "dist");
+const methodologyPath = path.join(rootDir, "METHODOLOGY.md");
 
 const MEASUREMENT_STATUSES = {
   fit: "Fit for stated use",
@@ -343,12 +344,78 @@ const renderDescription = (description) => {
   return paragraphs.map((p) => `<p>${htmlEscape(p)}</p>`).join("");
 };
 
+const renderMarkdownDocument = (raw) => {
+  const markdown = raw
+    .replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, "")
+    .replaceAll("\r\n", "\n")
+    .trim();
+  const output = [];
+  let paragraph = [];
+  let listItems = [];
+  let listTag = null;
+
+  const flushParagraph = () => {
+    if (paragraph.length) {
+      output.push(`<p>${htmlEscape(paragraph.join(" "))}</p>`);
+      paragraph = [];
+    }
+  };
+
+  const flushList = () => {
+    if (listItems.length) {
+      output.push(`<${listTag}>${listItems.map((item) => `<li>${htmlEscape(item)}</li>`).join("")}</${listTag}>`);
+      listItems = [];
+      listTag = null;
+    }
+  };
+
+  for (const line of markdown.split("\n")) {
+    const trimmed = line.trim();
+    const heading = trimmed.match(/^(##|###)\s+(.+)$/);
+    const unorderedItem = trimmed.match(/^\*\s+(.+)$/);
+    const orderedItem = trimmed.match(/^\d+\.\s+(.+)$/);
+
+    if (!trimmed) {
+      flushParagraph();
+      flushList();
+    } else if (heading) {
+      flushParagraph();
+      flushList();
+      const level = heading[1].length;
+      output.push(`<h${level}>${htmlEscape(heading[2])}</h${level}>`);
+    } else if (unorderedItem || orderedItem) {
+      flushParagraph();
+      const nextListTag = unorderedItem ? "ul" : "ol";
+      if (listTag && listTag !== nextListTag) flushList();
+      listTag = nextListTag;
+      listItems.push((unorderedItem || orderedItem)[1]);
+    } else {
+      flushList();
+      paragraph.push(trimmed);
+    }
+  }
+
+  flushParagraph();
+  flushList();
+  return output.join("\n");
+};
+
+const readMethodology = async () => {
+  const raw = await readFile(methodologyPath, "utf8");
+  const frontmatter = parseFrontmatter(raw, "METHODOLOGY.md");
+  if (!frontmatter.title || !frontmatter.description) {
+    throw new Error("METHODOLOGY.md requires title and description frontmatter");
+  }
+  return { raw, title: frontmatter.title, description: frontmatter.description };
+};
+
 const pageShell = (
   title,
   content,
   {
     homeHref = "./",
     compareHref = "compare/",
+    methodologyHref = "methodology/",
     assetPrefix = "./assets",
     extraHead = "",
     inlineScript = ""
@@ -387,6 +454,7 @@ const pageShell = (
       <nav aria-label="Primary navigation">
         <a href="${htmlEscape(homeHref)}">Register</a>
         <a href="${htmlEscape(compareHref)}">Compare</a>
+        <a href="${htmlEscape(methodologyHref)}">Methodology</a>
       </nav>
     </div>
   </header>
@@ -549,6 +617,7 @@ ${await readFile(path.join(assetsDir, "search.js"), "utf8")}
   return pageShell("Benchmark Metrology Lab", body, {
     homeHref: "./",
     compareHref: "compare/",
+    methodologyHref: "methodology/",
     assetPrefix: "./assets",
     inlineScript: script
   });
@@ -636,6 +705,7 @@ const renderBenchmarkPage = (benchmark, benchmarksBySlug, benchmarksByTitle) => 
   return pageShell(`${benchmark.title} \u2022 Benchmark Metrology Lab`, body, {
     homeHref: "../../",
     compareHref: "../../compare/",
+    methodologyHref: "../../methodology/",
     assetPrefix: "../../assets"
   });
 };
@@ -654,13 +724,88 @@ const renderComparePage = () => {
   return pageShell("Compare Instruments \u2022 Benchmark Metrology Lab", body, {
     homeHref: "../",
     compareHref: "./",
+    methodologyHref: "../methodology/",
     assetPrefix: "../assets",
     inlineScript: '<script src="../assets/compare.js"></script>'
   });
 };
 
+const renderMethodologyPage = (methodology, benchmarks) => {
+  const notFitBenchmarks = benchmarks.filter(
+    (benchmark) => benchmark.measurementStatus === "not-fit"
+  );
+  const redRegister = notFitBenchmarks
+    .map(
+      (benchmark) => `
+<article class="red-record">
+  <header>
+    <div>
+      <h3><a href="../benchmarks/${htmlEscape(benchmark.slug)}/">${htmlEscape(benchmark.title)}</a></h3>
+      <p>${htmlEscape(benchmark.taxonomy)}</p>
+    </div>
+    <span class="status-badge status-not-fit">${htmlEscape(MEASUREMENT_STATUSES[benchmark.measurementStatus])}</span>
+  </header>
+  <div class="red-record-risks">
+    <span>Saturation ${renderRiskValue(benchmark.saturationRisk)}</span>
+    <span>Contamination ${renderRiskValue(benchmark.contaminationRisk)}</span>
+    <span>Reproducibility ${renderRiskValue(benchmark.reproducibility)}</span>
+  </div>
+  <h4>Unsupported primary inferences</h4>
+  ${renderList(benchmark.unsupportedInferences.map((item) => htmlEscape(item)))}
+  <details>
+    <summary>${benchmark.validityThreats.length} source-linked validity threats</summary>
+    ${renderEvidenceList(benchmark.validityThreats)}
+  </details>
+</article>`
+    )
+    .join("\n");
+
+  const body = `
+<section class="methodology-header">
+  <p class="hero-kicker">Assessment governance</p>
+  <h1>${htmlEscape(methodology.title)}</h1>
+  <p>${htmlEscape(methodology.description)}.</p>
+</section>
+
+<div class="methodology-layout">
+  <article class="methodology-copy">
+    ${renderMarkdownDocument(methodology.raw)}
+  </article>
+  <aside class="methodology-summary card" aria-labelledby="status-scale-heading">
+    <p class="summary-label">Current register</p>
+    <strong>${notFitBenchmarks.length} of ${benchmarks.length}</strong>
+    <span>instruments are not fit for primary inference</span>
+    <h2 id="status-scale-heading">Status scale</h2>
+    <ul class="status-scale">
+      <li><span class="status-badge status-fit">Fit for stated use</span></li>
+      <li><span class="status-badge status-qualified">Qualified use</span></li>
+      <li><span class="status-badge status-not-fit">Not fit for primary inference</span></li>
+    </ul>
+  </aside>
+</div>
+
+<section class="red-register" aria-labelledby="red-register-heading">
+  <header class="section-heading">
+    <div>
+      <p class="hero-kicker">Current application</p>
+      <h2 id="red-register-heading">Red register</h2>
+    </div>
+    <p>Each decision exposes the source-linked evidence recorded for that instrument.</p>
+  </header>
+  <div class="red-register-grid">${redRegister}</div>
+</section>`;
+
+  return pageShell(`${methodology.title} \u2022 Benchmark Metrology Lab`, body, {
+    homeHref: "../",
+    compareHref: "../compare/",
+    methodologyHref: "./",
+    assetPrefix: "../assets"
+  });
+};
+
 const createSite = async () => {
   const benchmarks = await readBenchmarks();
+  const methodology = await readMethodology();
   const benchmarksBySlug = new Map(benchmarks.map((item) => [item.slug, item]));
   const benchmarksByTitle = new Map(
     benchmarks.map((item) => [item.title.toLowerCase(), item])
@@ -676,6 +821,14 @@ const createSite = async () => {
   const compareDir = path.join(distDir, "compare");
   await mkdir(compareDir, { recursive: true });
   await writeFile(path.join(compareDir, "index.html"), renderComparePage(), "utf8");
+
+  const methodologyDir = path.join(distDir, "methodology");
+  await mkdir(methodologyDir, { recursive: true });
+  await writeFile(
+    path.join(methodologyDir, "index.html"),
+    renderMethodologyPage(methodology, benchmarks),
+    "utf8"
+  );
 
   for (const benchmark of benchmarks) {
     const benchmarkDir = path.join(distDir, "benchmarks", benchmark.slug);

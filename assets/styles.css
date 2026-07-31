@@ -921,6 +921,235 @@ a {
   color: #7f97a0;
 }
 
+/* Assessment methodology and live red register */
+.methodology-header {
+  position: relative;
+  margin: 2rem 0 0;
+  overflow: hidden;
+  border-left: 6px solid var(--not-fit);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    #173f45;
+  background-size: 24px 24px, 24px 24px, auto;
+  color: #fff;
+  padding: 1.7rem 1.5rem;
+}
+
+.methodology-header::after {
+  position: absolute;
+  top: -1.5rem;
+  right: 1rem;
+  color: rgba(255, 255, 255, 0.08);
+  content: "R";
+  font-family: "Palatino Linotype", Georgia, serif;
+  font-size: 8rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.methodology-header h1 {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 2.15rem;
+}
+
+.methodology-header > p:last-child {
+  position: relative;
+  z-index: 1;
+  max-width: 48rem;
+  margin: 0.45rem 0 0;
+  color: #d6e8e4;
+}
+
+.methodology-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(240px, 0.8fr);
+  gap: 2.2rem;
+  align-items: start;
+  margin: 2rem 0 2.7rem;
+}
+
+.methodology-copy {
+  min-width: 0;
+}
+
+.methodology-copy h2 {
+  margin: 2rem 0 0.45rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--accent-ink);
+  font-size: 1.35rem;
+}
+
+.methodology-copy h2:first-child {
+  margin-top: 0;
+}
+
+.methodology-copy h3 {
+  margin: 1.2rem 0 0.3rem;
+  color: #294d53;
+  font-size: 1.02rem;
+}
+
+.methodology-copy p,
+.methodology-copy li {
+  max-width: 72ch;
+}
+
+.methodology-copy ol,
+.methodology-copy ul {
+  padding-left: 1.25rem;
+}
+
+.methodology-summary {
+  position: sticky;
+  top: 1rem;
+  border-top: 4px solid var(--not-fit);
+}
+
+.methodology-summary .summary-label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.methodology-summary > strong {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--not-fit);
+  font-family: "Palatino Linotype", Georgia, serif;
+  font-size: 2.25rem;
+  line-height: 1;
+}
+
+.methodology-summary > span {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.methodology-summary h2 {
+  margin: 1.35rem 0 0.6rem;
+  font-size: 1rem;
+}
+
+.status-scale {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.red-register {
+  margin-bottom: 3rem;
+  padding-top: 1.5rem;
+  border-top: 4px solid var(--not-fit);
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  align-items: end;
+  margin-bottom: 1rem;
+}
+
+.section-heading h2 {
+  margin: 0;
+  color: var(--not-fit);
+  font-size: 1.75rem;
+}
+
+.section-heading > p {
+  max-width: 30rem;
+  margin: 0;
+  color: var(--muted);
+  text-align: right;
+}
+
+.red-register-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.red-record {
+  border: 1px solid #e2b9bf;
+  border-left: 5px solid var(--not-fit);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 1rem 1.1rem;
+  box-shadow: 0 2px 8px rgba(87, 31, 39, 0.06);
+}
+
+.red-record > header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.red-record h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.red-record header p {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.red-record h4 {
+  margin: 1rem 0 0.35rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.red-record > ul {
+  margin: 0;
+}
+
+.red-record-risks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-top: 0.8rem;
+  padding: 0.65rem 0;
+  border-top: 1px solid #f0dadd;
+  border-bottom: 1px solid #f0dadd;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.red-record-risks > span {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.red-record details {
+  margin-top: 0.9rem;
+  border-top: 1px dashed var(--line);
+  padding-top: 0.7rem;
+}
+
+.red-record summary {
+  cursor: pointer;
+  color: var(--accent-ink);
+  font-weight: 700;
+}
+
+.red-record details ul {
+  margin-bottom: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .brand-logo .logo-trend {
     animation: none;
@@ -981,5 +1210,48 @@ a {
   .scenery-axis-one,
   .scenery-target {
     display: none;
+  }
+
+  .methodology-layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .methodology-summary {
+    position: static;
+  }
+
+  .section-heading,
+  .red-record > header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .section-heading > p {
+    text-align: left;
+  }
+}
+
+@media (max-width: 520px) {
+  .site-header .container {
+    flex-wrap: wrap;
+    padding: 0.4rem 0;
+  }
+
+  .site-header nav {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 0.25rem;
+    padding-top: 0.25rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .methodology-header {
+    padding: 1.25rem 1rem;
+  }
+
+  .methodology-header h1 {
+    max-width: 15rem;
+    font-size: 1.8rem;
   }
 }

@@ -4,7 +4,7 @@ description: Benchmark record for grade-school mathematical reasoning
 ---
 
 Slug: gsm8k
-Measurement Status: Qualified
+Measurement Status: Not Fit
 Taxonomy: Mathematical reasoning
 Task Format: Free-response word problems
 Languages: English
