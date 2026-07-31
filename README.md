@@ -28,6 +28,7 @@ independent review.
 
 * `benchmarks/`: benchmark measurement records
 * `assets/`: shared CSS and browser-side search and filtering JavaScript
+* `papers/`: downloaded PDFs, page-delimited extracted text, and evidence indexes
 * `tools/build.mjs`: static page generator
 * `dist/`: generated deployment artifact
 
