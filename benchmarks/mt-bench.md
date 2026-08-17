@@ -60,5 +60,8 @@ MT-Bench evaluates multi-turn chat assistants with an LLM judge, while Chatbot A
 
 ## Alternative Instruments
 - Arena-Hard-Auto
+
+## Alternative Instruments
+- Arena-Hard-Auto
 - JudgeBench
 - Length-Controlled AlpacaEval

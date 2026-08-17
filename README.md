@@ -33,6 +33,19 @@ independent review.
 * `tools/build.mjs`: static page generator
 * `dist/`: generated deployment artifact
 
+## Leaderboard Coverage
+
+The register covers every dataset published on the Microsoft Foundry model
+leaderboards: the quality index, the safety scenarios, and the scenario
+leaderboards. Source verification notes, scope caveats, and the claims that could
+not be substantiated are recorded in
+[papers/foundry-leaderboard/EVIDENCE.md](papers/foundry-leaderboard/EVIDENCE.md).
+
+Recording a leaderboard dataset is not an endorsement of it. Several records
+assess the leaderboard's stated interpretation rather than the benchmark in
+isolation, because measurement status is assigned to a benchmark paired with an
+intended inference.
+
 ## Benchmark Record Schema
 
 Every file in `benchmarks/` requires YAML frontmatter with `title` and
